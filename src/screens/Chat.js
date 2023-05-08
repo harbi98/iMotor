@@ -19,12 +19,12 @@ export default function Chat() {
         >
             <SearchBar platform='ios' placeholder='Search messages' containerStyle={{width: window_width - 20,}}/>
         </View>
-        <Divider 
+        {/* <Divider 
             style={{ width: window_width * 0.9, marginTop: 2, marginBottom: 15 }}
             width='1'
-        />
+        /> */}
         <ScrollView style={{flex: 1, width: window_width}}>
-            <Button type='clear' style={{borderBottomWidth: 1, borderBottomColor: 'grey'}}>
+            <Button type='outlined'>
                 <View flexDirection='row' style={{width: window_width, height: 100, alignItems: 'center', paddingLeft: 15, paddingRight: 15}}>
                     <Image
                         style={{
@@ -41,7 +41,7 @@ export default function Chat() {
                     </View>
                 </View>
             </Button>
-            <Button type='clear' style={{borderBottomWidth: 1, borderBottomColor: 'grey'}}>
+            <Button type='clear'>
                 <View flexDirection='row' style={{width: window_width, height: 100, alignItems: 'center', paddingLeft: 15, paddingRight: 15}}>
                     <Image
                         style={{
@@ -58,7 +58,7 @@ export default function Chat() {
                     </View>
                 </View>
             </Button>
-            <Button type='clear' style={{borderBottomWidth: 1, borderBottomColor: 'grey'}}>
+            <Button type='clear'>
                 <View flexDirection='row' style={{width: window_width, height: 100, alignItems: 'center', paddingLeft: 15, paddingRight: 15}}>
                     <Image
                         style={{

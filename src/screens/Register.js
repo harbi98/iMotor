@@ -1,11 +1,21 @@
+import React, { useContext, useState } from 'react';
 import { View, TextInput, StyleSheet, Dimensions, Image, SafeAreaView } from 'react-native';
 import { styles } from '../public/Style';
 import { Button, Text } from '@rneui/themed';
+import { AuthContext } from '../context/AuthContext';
 
 const window_width = Dimensions.get('window').width;
 const window_height = Dimensions.get('window').height;
 
 export default function Register({navigation}) {
+  const {registerUser} = useContext(AuthContext);
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
   return (
     <SafeAreaView style={styles.container}>
       <Image resizeMode='contain' style={custom_style.app_title} source={require('../../assets/iMotor.png')}/>
@@ -15,12 +25,16 @@ export default function Register({navigation}) {
             <Text>First Name</Text>
             <TextInput
               style={custom_style.input}
+              onChangeText={firstname => setFirstName(firstname)}
+              value={firstName}
             />
           </View>
           <View style={{paddingLeft: 5, width: '50%'}}>
             <Text>Last Name</Text>
             <TextInput
               style={custom_style.input}
+              onChangeText={lastname => setLastName(lastname)}
+              value={lastName}
             />
           </View>
         </View>
@@ -30,6 +44,8 @@ export default function Register({navigation}) {
             autoCapitalize='none'
             spellCheck={false}
             style={custom_style.input}
+            onChangeText={email => setEmail(email)}
+            value={email}
           />
         </View>
         <View style={custom_style.field_container}>
@@ -37,6 +53,8 @@ export default function Register({navigation}) {
           <TextInput
             secureTextEntry={true}
             style={custom_style.input}
+            onChangeText={password => setPassword(password)}
+            value={password}
           />
         </View>
         <View style={custom_style.field_container}>
@@ -44,12 +62,14 @@ export default function Register({navigation}) {
           <TextInput
             secureTextEntry={true}
             style={custom_style.input}
+            onChangeText={confirm_password => setConfirmPassword(confirm_password)}
+            value={confirmPassword}
           />
         </View>
         <View style={{ paddingTop: 10}}>
         <Button
             title="Register"
-            onPress={() => console.log('Button pressed')}
+            onPress={() => registerUser(firstName,lastName,email,password,confirmPassword)}
             buttonStyle={custom_style.register_button}
             titleStyle={{ fontSize: 15 }}
           />

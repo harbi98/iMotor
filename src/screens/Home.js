@@ -4,7 +4,6 @@ import { styles } from '../public/Style';
 import { SearchBar, Button, Divider } from '@rneui/themed';
 
 const window_width = Dimensions.get('window').width;
-const window_height = Dimensions.get('window').height;
 
 export default function Home() {
   return (
@@ -30,28 +29,14 @@ export default function Home() {
                 />
             </Button>
         </View>
-        <Divider 
+        {/* <Divider 
             style={{ width: window_width * 0.9, marginTop: 2, marginBottom: 2 }}
             width='1'
-        />
-        <View flexDirection='row' style={{width: window_width, justifyContent: 'space-around'}}>
-            <Button type='clear'>
-                <Text style={{color: '#0000000'}}>Cars</Text>
-            </Button>
-            <Button type='clear'>
-                <Text style={{color: '#0000000'}}>Motorcycle</Text>
-            </Button>
-            <Button type='clear'>
-                <Text style={{color: '#0000000'}}>Heavy Vehicle</Text>
-            </Button>
-            <Button type='clear'>
-                <Text style={{color: '#0000000'}}>Boat</Text>
-            </Button>
-        </View>
-        <Divider 
+        /> */}
+        {/* <Divider 
             style={{ width: window_width * 0.9, marginTop: 2, marginBottom: 20 }}
             width='1'
-        />
+        /> */}
         <View style={{width: window_width, alignItems: 'center', marginBottom: 20}}>
             <View
                 flexDirection='row'
@@ -77,10 +62,10 @@ export default function Home() {
                 </View>
             </ScrollView>
         </View>
-        <Divider 
+        {/* <Divider 
             style={{ width: window_width * 0.9, marginTop: 2, marginBottom: 20 }}
             width='1'
-        />
+        /> */}
         <View style={{flex: 1,width: window_width * 0.9, marginBottom: 10}}>
             <View flexDirection='row' style={{justifyContent: 'space-between', alignItems: 'center'}}>
                 <Text style={{fontSize: 20, fontWeight: 'bold'}}>Car Brands</Text>
@@ -97,21 +82,21 @@ export default function Home() {
                     />
                 </View>
             </View>
-            <View style={{flex: 1, justifyContent: 'space-evenly'}}>
+            <View style={{justifyContent: 'space-evenly', height: window_width * 0.9}}>
                 <View flexDirection='row' style={{justifyContent: 'space-evenly'}}>
-                    <View style={{width: 100, height: 100, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: 100, height: 100, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: 100, height: 100, borderRadius: 20, backgroundColor: 'grey'}}></View>
+                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'red'}}></View>
+                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
+                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
                 </View>
                 <View flexDirection='row' style={{justifyContent: 'space-evenly'}}>
-                    <View style={{width: 100, height: 100, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: 100, height: 100, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: 100, height: 100, borderRadius: 20, backgroundColor: 'grey'}}></View>
+                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
+                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
+                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
                 </View>
                 <View flexDirection='row' style={{justifyContent: 'space-evenly'}}>
-                    <View style={{width: 100, height: 100, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: 100, height: 100, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: 100, height: 100, borderRadius: 20, backgroundColor: 'grey'}}></View>
+                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
+                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
+                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
                 </View>
             </View>
         </View>

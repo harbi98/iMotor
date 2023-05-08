@@ -1,10 +1,8 @@
-import { StyleSheet, Dimensions } from "react-native";
-
-const window_width = Dimensions.get('window').width;
-const window_height = Dimensions.get('window').height;
+import { StyleSheet, Platform, StatusBar } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',

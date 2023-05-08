@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image, ScrollView } from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
+import { AuthContext } from '../context/AuthContext';
 import { styles } from '../public/Style';
 import { Button, Divider } from '@rneui/themed';
 
@@ -7,17 +8,17 @@ const window_width = Dimensions.get('window').width;
 const window_height = Dimensions.get('window').height;
 
 export default function Menu({navigation}) {
-  return (
-    <View style={styles.container}>
+    const {logout} = useContext(AuthContext);
+    return (
+    <SafeAreaView style={styles.container}>
         <ScrollView style={{flex: 1, width: window_width}}>
             <View
                 style={{
                     width: window_width,
-                    height: 300,
+                    height: 250,
                     backgroundColor: '#0a5ca8',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    paddingTop: 50
                 }}
             >
                 <View flexDirection='row' style={{width: '80%', alignItems: 'center'}}>
@@ -31,8 +32,8 @@ export default function Menu({navigation}) {
                         source={require('../../assets/account-circle-outline.png')}
                     />
                     <View style={{flex: 1}}>
-                        <Text numberOfLines={1} style={{fontSize: 35, color: '#FFFFFFFF'}}>Hi Juan Dela</Text>
-                        <Text numberOfLines={1} style={{fontSize: 35, color: '#FFFFFFFF'}}>Cruz</Text>
+                        <Text numberOfLines={1} style={{fontSize: 35, color: '#FFFFFFFF'}}>Hi Juan</Text>
+                        <Text numberOfLines={1} style={{fontSize: 35, color: '#FFFFFFFF'}}>Dela Cruz</Text>
                         <Text numberOfLines={1} style={{fontSize: 15, color: '#FFFFFFFF'}}>example@email.com</Text>
                     </View>
                 </View>
@@ -50,10 +51,16 @@ export default function Menu({navigation}) {
                 </View>
             </View>
             <View style={{flex: 1, alignItems: 'center', marginTop: 10}}>
-                <View style={{width: window_width * 0.9}}>
-                    <Text style={{fontSize: 20, color: 'grey', marginBottom: 10}}>My Account</Text>
-                    <Button type='clear'>
-                        <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                <View style={{width: window_width}}>
+                    <Text style={{fontSize: 20, color: 'grey', marginBottom: 10, marginLeft: 15}}>My Account</Text>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                        onPress={() => navigation.navigate("Profile")}
+                    >
+                        <View flexDirection='row' style={{width: '95%', alignItems: 'center', paddingHorizontal: 20}}>
                             <Image
                                 style={{
                                     tintColor: '#000000',
@@ -75,8 +82,13 @@ export default function Menu({navigation}) {
                             source={require('../../assets/chevron-right.png')}
                         />
                     </Button>
-                    <Button type='clear'>
-                        <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                    >
+                        <View flexDirection='row' style={{width: '95%', alignItems: 'center', paddingHorizontal: 20}}>
                             <Image
                                 style={{
                                     tintColor: '#000000',
@@ -99,14 +111,15 @@ export default function Menu({navigation}) {
                         />
                     </Button>
                 </View>
-                <Divider 
-                    style={{ width: window_width * 0.95, marginTop: 2, marginBottom: 10 }}
-                    width='1'
-                />
-                <View style={{width: window_width * 0.9}}>
-                    <Text style={{fontSize: 20, color: 'grey', marginBottom: 10}}>Settings</Text>
-                    <Button type='clear'>
-                        <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                <View style={{width: window_width}}>
+                    <Text style={{fontSize: 20, color: 'grey', marginBottom: 10, marginLeft: 15}}>Settings</Text>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                    >
+                        <View flexDirection='row' style={{width: '95%', alignItems: 'center', paddingHorizontal: 20}}>
                             <Image
                                 style={{
                                     tintColor: '#000000',
@@ -128,8 +141,13 @@ export default function Menu({navigation}) {
                             source={require('../../assets/chevron-right.png')}
                         />
                     </Button>
-                    <Button type='clear'>
-                        <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                    >
+                        <View flexDirection='row' style={{width: '95%', alignItems: 'center', paddingHorizontal: 20}}>
                             <Image
                                 style={{
                                     tintColor: '#000000',
@@ -152,14 +170,15 @@ export default function Menu({navigation}) {
                         />
                     </Button>
                 </View>
-                <Divider 
-                    style={{ width: window_width * 0.95, marginTop: 2, marginBottom: 10 }}
-                    width='1'
-                />
-                <View style={{width: window_width * 0.9}}>
-                    <Text style={{fontSize: 20, color: 'grey', marginBottom: 10}}>Others</Text>
-                    <Button type='clear'>
-                        <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                <View style={{width: window_width}}>
+                    <Text style={{fontSize: 20, color: 'grey', marginBottom: 10, marginLeft: 15}}>Others</Text>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                    >
+                        <View flexDirection='row' style={{width: '95%', alignItems: 'center', paddingHorizontal: 20}}>
                             <Image
                                 style={{
                                     tintColor: '#000000',
@@ -181,8 +200,13 @@ export default function Menu({navigation}) {
                             source={require('../../assets/chevron-right.png')}
                         />
                     </Button>
-                    <Button type='clear'>
-                        <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                    >
+                        <View flexDirection='row' style={{width: '95%', alignItems: 'center', paddingHorizontal: 20}}>
                             <Image
                                 style={{
                                     tintColor: '#000000',
@@ -204,8 +228,13 @@ export default function Menu({navigation}) {
                             source={require('../../assets/chevron-right.png')}
                         />
                     </Button>
-                    <Button type='clear'>
-                        <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                    >
+                        <View flexDirection='row' style={{width: '95%', alignItems: 'center', paddingHorizontal: 20}}>
                             <Image
                                 style={{
                                     tintColor: '#000000',
@@ -227,8 +256,13 @@ export default function Menu({navigation}) {
                             source={require('../../assets/chevron-right.png')}
                         />
                     </Button>
-                    <Button type='clear'>
-                        <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                    >
+                        <View flexDirection='row' style={{width: '95%', alignItems: 'center', paddingHorizontal: 20}}>
                             <Image
                                 style={{
                                     tintColor: '#000000',
@@ -250,8 +284,13 @@ export default function Menu({navigation}) {
                             source={require('../../assets/chevron-right.png')}
                         />
                     </Button>
-                    <Button type='clear'>
-                        <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                    >
+                        <View flexDirection='row' style={{width: '95%', alignItems: 'center', paddingHorizontal: 20}}>
                             <Image
                                 style={{
                                     tintColor: '#000000',
@@ -274,12 +313,14 @@ export default function Menu({navigation}) {
                         />
                     </Button>
                 </View>
-                <Divider 
-                    style={{ width: window_width * 0.95, marginTop: 2, marginBottom: 2 }}
-                    width='1'
-                />
-                <View style={{width: window_width * 0.9}}>
-                    <Button type='clear' onPress={() => navigation.navigate('Login')}>
+                <View style={{width: window_width}}>
+                    <Button
+                        type='clear'
+                        buttonStyle={{
+                            height: 70
+                        }}
+                        onPress={() => logout()}
+                    >
                         <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
                             <Image
                                 style={{
@@ -292,24 +333,15 @@ export default function Menu({navigation}) {
                             />
                             <Text>Logout</Text>
                         </View>
-                        <Image
-                            style={{
-                                tintColor: '#FFFFFFFF',
-                                marginRight: 3,
-                                width: 35,
-                                height: 35
-                            }}
-                            source={require('../../assets/logout.png')}
-                        />
                     </Button>
                 </View>
             </View>
-            <View style={{height: 130}}>
+            <View style={{height: 80}}>
                 {/* Blank space */}
             </View>
         </ScrollView>
-    </View>
-  )
+    </SafeAreaView>
+    )
 }
 
 const custom_styles = StyleSheet.create({})

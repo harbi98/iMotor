@@ -1,11 +1,17 @@
+import React, { useContext, useState } from 'react';
 import { View, TextInput, StyleSheet, Dimensions, Image, SafeAreaView } from 'react-native';
 import { styles } from '../public/Style';
 import { Button, Text, Divider } from '@rneui/themed';
+import { AuthContext } from '../context/AuthContext';
 
 const window_width = Dimensions.get('window').width;
 const window_height = Dimensions.get('window').height;
 
 export default function Login({navigation}) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const {login} = useContext(AuthContext);
   return (
     <SafeAreaView style={styles.container}>
       <Image resizeMode='contain' style={custom_style.app_title} source={require('../../assets/iMotor.png')}/>
@@ -15,6 +21,8 @@ export default function Login({navigation}) {
           <TextInput
             autoCapitalize='none'
             style={custom_style.input}
+            onChangeText={email => setEmail(email)}
+            value={email}
           />
         </View>
         <View style={custom_style.field_container}>
@@ -22,6 +30,8 @@ export default function Login({navigation}) {
           <TextInput
             secureTextEntry={true}
             style={custom_style.input}
+            onChangeText={password => setPassword(password)}
+            value={password}
           />
         </View>
         <View>
@@ -29,15 +39,8 @@ export default function Login({navigation}) {
             flexDirection='row' 
             style={{ alignItems: 'center', justifyContent: 'flex-end' }}
           >
-            {/* <Button
-              title="LOGIN"
-              onPress={() => console.log('Button pressed')}
-              buttonStyle={custom_style.login_button}
-              titleStyle={{ fontSize: 15 }}
-            /> */}
             <Button
               title="Forgot Password?"
-              onPress={() => console.log('Button pressed')}
               type='clear'
               titleStyle={{ color: '#0300A4' }}
             />
@@ -45,7 +48,7 @@ export default function Login({navigation}) {
           <Button
             title="LOGIN"
             loading={false}
-            onPress={() => navigation.navigate('Categories')}
+            onPress={() => login(email, password)}
             buttonStyle={custom_style.login_button}
             titleStyle={{ fontSize: 15 }}
           />
