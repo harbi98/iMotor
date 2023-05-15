@@ -1,12 +1,44 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image, ScrollView } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image, ScrollView, FlatList, TouchableHighlight } from 'react-native';
+import React, {useEffect, useState} from 'react';
 import { styles } from '../public/Style';
-import { SearchBar, Button, Divider } from '@rneui/themed';
+import { SearchBar, Button, Skeleton } from '@rneui/themed';
+import { BASE_URL, processResponse } from '../config';
+import { LinearGradient } from 'expo-linear-gradient';
 
 const window_width = Dimensions.get('window').width;
 
-export default function Home() {
-  return (
+const Home = () => {
+    const [brands, setBrands] = useState([]);
+    const [brandsLoading, setBrandsLoading] = useState(true);
+
+    const getBrands = () => {
+        try{
+            fetch(BASE_URL+'brands/type/car',{
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    //'Authorization': `Bearer ${userToken}`,
+                },
+            })
+            .then(processResponse)
+            .then(res => {
+                const { statusCode, data } = res;
+                console.log(statusCode);
+                setBrands(data.brands);
+                setBrandsLoading(false);
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+        } catch (e){
+            console.log(e);
+        }
+    }
+    useEffect(() => {
+        getBrands();
+    }, [])
+    return (
     <SafeAreaView style={styles.container}>
         <View
             flexDirection='row'
@@ -17,7 +49,7 @@ export default function Home() {
             }}
         >
             <SearchBar platform='ios' placeholder='Search listing' containerStyle={{width: window_width - 75,}}/>
-            <Button type='clear'>
+            <Button type='clear' onPress={() => console.log(brands)}>
                 <Image
                     style={{
                         tintColor: '#000000',
@@ -67,7 +99,7 @@ export default function Home() {
             width='1'
         /> */}
         <View style={{flex: 1,width: window_width * 0.9, marginBottom: 10}}>
-            <View flexDirection='row' style={{justifyContent: 'space-between', alignItems: 'center'}}>
+            <View flexDirection='row' style={{justifyContent: 'space-between', alignItems: 'center', marginBottom: 15}}>
                 <Text style={{fontSize: 20, fontWeight: 'bold'}}>Car Brands</Text>
                 <View flexDirection='row' style={{alignItems: 'center'}}>
                     <Text>Browse More</Text>
@@ -82,26 +114,111 @@ export default function Home() {
                     />
                 </View>
             </View>
-            <View style={{justifyContent: 'space-evenly', height: window_width * 0.9}}>
-                <View flexDirection='row' style={{justifyContent: 'space-evenly'}}>
-                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'red'}}></View>
-                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
+            <View style={{height: window_width * 0.9}}>
+                {brandsLoading ?
+                <View style={{justifyContent: 'space-evenly', width: '100%', height: '100%'}}>
+                    <View flexDirection='row' style={{justifyContent: 'space-evenly'}}>
+                        <Skeleton
+                            LinearGradientComponent={LinearGradient}
+                            animation="wave"
+                            width={window_width * 0.28}
+                            height={window_width * 0.28}
+                            borderRadius={20}
+                        />
+                        <Skeleton
+                            LinearGradientComponent={LinearGradient}
+                            animation="wave"
+                            width={window_width * 0.28}
+                            height={window_width * 0.28}
+                            borderRadius={20}
+                        />
+                        <Skeleton
+                            LinearGradientComponent={LinearGradient}
+                            animation="wave"
+                            width={window_width * 0.28}
+                            height={window_width * 0.28}
+                            borderRadius={20}
+                        />
+                    </View>
+                    <View flexDirection='row' style={{justifyContent: 'space-evenly'}}>
+                        <Skeleton
+                            LinearGradientComponent={LinearGradient}
+                            animation="wave"
+                            width={window_width * 0.28}
+                            height={window_width * 0.28}
+                            borderRadius={20}
+                        />
+                        <Skeleton
+                            LinearGradientComponent={LinearGradient}
+                            animation="wave"
+                            width={window_width * 0.28}
+                            height={window_width * 0.28}
+                            borderRadius={20}
+                        />
+                        <Skeleton
+                            LinearGradientComponent={LinearGradient}
+                            animation="wave"
+                            width={window_width * 0.28}
+                            height={window_width * 0.28}
+                            borderRadius={20}
+                        />
+                    </View>
+                    <View flexDirection='row' style={{justifyContent: 'space-evenly'}}>
+                        <Skeleton
+                            LinearGradientComponent={LinearGradient}
+                            animation="wave"
+                            width={window_width * 0.28}
+                            height={window_width * 0.28}
+                            borderRadius={20}
+                        />
+                        <Skeleton
+                            LinearGradientComponent={LinearGradient}
+                            animation="wave"
+                            width={window_width * 0.28}
+                            height={window_width * 0.28}
+                            borderRadius={20}
+                        />
+                        <Skeleton
+                            LinearGradientComponent={LinearGradient}
+                            animation="wave"
+                            width={window_width * 0.28}
+                            height={window_width * 0.28}
+                            borderRadius={20}
+                        />
+                    </View>
                 </View>
-                <View flexDirection='row' style={{justifyContent: 'space-evenly'}}>
-                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                </View>
-                <View flexDirection='row' style={{justifyContent: 'space-evenly'}}>
-                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                    <View style={{width: window_width * 0.28, height: window_width * 0.28, borderRadius: 20, backgroundColor: 'grey'}}></View>
-                </View>
+                : 
+                <FlatList
+                    contentContainerStyle={{width: '100%', height: '100%', justifyContent: 'space-evenly'}}
+                    numColumns={3}
+                    columnWrapperStyle={{justifyContent: 'space-evenly'}}
+                    data={brands.slice(0,9)}
+                    extraData={brands}
+                    renderItem={({item}) => {
+                        return (
+                            <TouchableHighlight
+                                underlayColor={'rgba(139, 198, 63, 0.2)'}
+                                style={{
+                                    width: window_width * 0.28,
+                                    height: window_width * 0.28,
+                                    borderRadius: 20,
+                                    borderWidth: 1,
+                                    borderColor: '#A7AE9C'
+                                }}
+                                onPress={() => alert(item.id + ' ' + item.brand_name)}
+                            >
+                                <Image style={{width: '100%', height: '100%', resizeMode: 'contain'}} source={{uri: item.brand_photo}}/>
+                            </TouchableHighlight>
+                        )
+                    }}
+                />
+                }
             </View>
         </View>
     </SafeAreaView>
-  )
+    )
 }
+
+export default Home;
 
 const custom_style = StyleSheet.create({})

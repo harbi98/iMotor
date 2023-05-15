@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, Image, TouchableHighlight, Animated } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Image, TouchableHighlight, Platform } from 'react-native';
 import React, {useRef} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/Home';
@@ -45,12 +45,12 @@ const Tabs = () => {
                 headerShown: false,
                 tabBarStyle: {
                     position: 'absolute', 
-                    height: 70,
+                    height: Platform.OS === 'ios' ? 100 : 70,
                     borderTopLeftRadius: 20,
                     borderTopRightRadius: 20,
                     backgroundColor: '#0a5ca8',
                     tabBarStyle: { position: 'absolute' },
-                    paddingBottom: 15,
+                    paddingBottom: Platform.OS === 'ios' ? 30 : 15,
                     paddingTop: 15,
                 }
             }}
