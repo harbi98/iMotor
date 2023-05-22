@@ -35,23 +35,22 @@ export default function Login({navigation}) {
           />
         </View>
         <View>
-          <View
-            flexDirection='row' 
-            style={{ alignItems: 'center', justifyContent: 'flex-end' }}
-          >
+          <View style={{ alignItems: 'center', alignItems: 'flex-end' }}>
             <Button
               title="Forgot Password?"
               type='clear'
-              titleStyle={{ color: '#0300A4' }}
+              titleStyle={{ color: '#0300A4', fontSize: 15 }}
             />
           </View>
-          <Button
-            title="LOGIN"
-            loading={false}
-            onPress={() => login(email, password)}
-            buttonStyle={custom_style.login_button}
-            titleStyle={{ fontSize: 15 }}
-          />
+          <View>
+            <Button
+              title="LOGIN"
+              loading={false}
+              onPress={() => login(email, password)}
+              buttonStyle={custom_style.login_button}
+              titleStyle={{ fontSize: 15 }}
+            />
+          </View>
           <View 
             flexDirection='row' 
             style={{ alignItems: 'center', justifyContent: 'center', marginTop: 25, marginBottom: 25 }}
@@ -72,14 +71,14 @@ export default function Login({navigation}) {
           <View flexDirection='row' style={{alignItems: 'center', justifyContent: 'space-evenly', paddingTop: 25}}>
             <Button 
               titleStyle={{fontSize: 10}} 
-              buttonStyle={{borderRadius: 20, width: 100}}
+              buttonStyle={{borderRadius: 5, width: 100}}
             >
               <Image style={{tintColor: 'white', width: 25, height: 25, marginRight: 3}} source={require('../../assets/facebook.png')}/>
               Facebook
             </Button>
             <Button
               titleStyle={{fontSize: 10}} 
-              buttonStyle={{borderRadius: 20, width: 100, backgroundColor: '#DB4437'}}
+              buttonStyle={{borderRadius: 5, width: 100, backgroundColor: '#DB4437'}}
             >
               <Image style={{tintColor: 'white', width: 25, height: 25, marginRight: 3}} source={require('../../assets/google-plus.png')}/>
               Google
@@ -97,12 +96,11 @@ const custom_style = StyleSheet.create({
     height: window_height * 0.20,
   },
   input: {
-    height: 40,
     width: '100%',
     borderWidth: 1,
     padding: 10,
-    borderRadius: 20,
-    height: 60,
+    borderRadius: 5,
+    height: 40,
     borderColor: '#D7D7D7',
     marginTop: 5,
   },
@@ -111,8 +109,9 @@ const custom_style = StyleSheet.create({
   },
   login_button: {
     backgroundColor: '#0a5ca8',
-    height: 60,
-    borderRadius: 20,
+    height: 40,
+    borderRadius: 5,
+    width: '100%'
   },
   field_container: {
     marginTop: 10

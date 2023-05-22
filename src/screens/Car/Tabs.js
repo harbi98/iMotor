@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, SafeAreaView, Image, TouchableHighlight, Platform } from 'react-native';
 import React, {useRef} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '../screens/Home';
-import MenuScreen from '../screens/Menu';
-import ChatScreen from '../screens/Chat';
-import FavoritesScreen from '../screens/Favorites';
-import AddListing from '../screens/AddListing';
+import HomeScreen from './Home';
+import MenuScreen from '../Menu';
+import ChatScreen from '../Chat';
+import FavoritesScreen from './Favorites';
+import AddListing from './AddListing';
 
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +19,7 @@ const CustomTabBarButton = ({children, onPress}) => {
                 borderRadius: 35,
                 justifyContent: 'center',
                 alignItems: 'center',
-                top: -30
+                top: -30,
             }}
             onPress={onPress}
         >
@@ -43,11 +43,10 @@ const Tabs = () => {
             screenOptions={{
                 tabBarShowLabel: false,
                 headerShown: false,
+                //tabBarHideOnKeyboard: true,
                 tabBarStyle: {
                     position: 'absolute', 
                     height: Platform.OS === 'ios' ? 100 : 70,
-                    borderTopLeftRadius: 20,
-                    borderTopRightRadius: 20,
                     backgroundColor: '#0a5ca8',
                     tabBarStyle: { position: 'absolute' },
                     paddingBottom: Platform.OS === 'ios' ? 30 : 15,
@@ -67,7 +66,7 @@ const Tabs = () => {
                                     width: 30,
                                     height: 30,
                                 }}
-                                source={require('../../assets/home-outline.png')}
+                                source={require('../../../assets/home-outline.png')}
                             />
                             {focused ? <Text style={{color: '#ffffff', fontSize: 9}}>Home</Text> : ''}
                         </View>
@@ -86,7 +85,7 @@ const Tabs = () => {
                                     width: 30,
                                     height: 30
                                 }}
-                                source={require('../../assets/square-star.png')}
+                                source={require('../../../assets/square-star.png')}
                             />
                             {focused ? <Text style={{color: '#ffffff', fontSize: 9}}>Favorites</Text> : ''}
                         </View>
@@ -99,7 +98,7 @@ const Tabs = () => {
                 options={{
                     tabBarIcon: ((focused) => (
                         <Image
-                            source={require('../../assets/square-plus.png')}
+                            source={require('../../../assets/square-plus.png')}
                             resizeMode='contain'
                             style={{
                                 tintColor: '#ffffff',
@@ -123,7 +122,7 @@ const Tabs = () => {
                                     width: 30,
                                     height: 30
                                 }}
-                                source={require('../../assets/messages.png')}
+                                source={require('../../../assets/messages.png')}
                             />
                             {focused ? <Text style={{color: '#ffffff', fontSize: 9}}>Messages</Text> : ''}
                         </View>
@@ -142,7 +141,7 @@ const Tabs = () => {
                                     width: 30,
                                     height: 30
                                 }}
-                                source={require('../../assets/user-gear.png')}
+                                source={require('../../../assets/user-gear.png')}
                             />
                             {focused ? <Text style={{color: '#ffffff', fontSize: 9}}>Options</Text> : ''}
                         </View>

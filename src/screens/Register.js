@@ -66,8 +66,8 @@ export default function Register({navigation}) {
             value={confirmPassword}
           />
         </View>
-        <View style={{ paddingTop: 10}}>
-        <Button
+        <View style={{ paddingTop: 20}}>
+          <Button
             title="Register"
             onPress={() => registerUser(firstName,lastName,email,password,confirmPassword)}
             buttonStyle={custom_style.register_button}
@@ -97,12 +97,11 @@ const custom_style = StyleSheet.create({
     height: window_height * 0.20,
   },
   input: {
-    height: 40,
     width: '100%',
     borderWidth: 1,
     padding: 10,
-    borderRadius: 20,
-    height: 60,
+    borderRadius: 5,
+    height: 40,
     borderColor: '#D7D7D7',
     marginTop: 5,
   },
@@ -112,8 +111,8 @@ const custom_style = StyleSheet.create({
   register_button: {
     backgroundColor: '#0a5ca8',
     width: '100%',
-    height: 60,
-    borderRadius: 20,
+    height: 40,
+    borderRadius: 5,
   },
   field_container: {
     marginTop: 10

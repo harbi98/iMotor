@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, Image } from 'react-native';
 import React from 'react';
-import { styles } from '../public/Style';
+import { styles } from '../../public/Style';
 import { SearchBar, Button, Divider } from '@rneui/themed';
 
 const window_width = Dimensions.get('window').width;
@@ -23,17 +23,17 @@ export default function Favorites() {
         </View>
         <ScrollView style={{flex: 1, width: window_width}}>
             <View
-                flexDirection='row'
-                style={{
-                        width: '100%', 
-                        height: 125, 
-                        paddingLeft: 15, 
-                        paddingRight: 15, 
-                        alignItems: 'center',
-                        borderBottomWidth: 1,
-                        borderBottomColor: '#D3D3D3'
-                    }}
-                >
+            flexDirection='row'
+            style={{
+                    width: '100%', 
+                    height: 125, 
+                    paddingLeft: 15, 
+                    paddingRight: 15, 
+                    alignItems: 'center',
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#D3D3D3'
+                }}
+            >
                 <View style={{backgroundColor: 'grey', width: 100, height: 100}}>
 
                 </View>
@@ -64,7 +64,7 @@ export default function Favorites() {
                 <Button type='clear'>
                     <Image 
                         style={{tintColor: 'red', width: 30, height: 30, marginRight: 3}} 
-                        source={require('../../assets/trash-can.png')}
+                        source={require('../../../assets/trash-can.png')}
                     />
                 </Button>
             </View>
@@ -110,7 +110,7 @@ export default function Favorites() {
                 <Button type='clear'>
                     <Image 
                         style={{tintColor: 'red', width: 30, height: 30, marginRight: 3}} 
-                        source={require('../../assets/trash-can.png')}
+                        source={require('../../../assets/trash-can.png')}
                     />
                 </Button>
             </View>

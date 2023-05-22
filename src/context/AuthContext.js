@@ -1,13 +1,22 @@
 import React, { createContext, useState } from 'react';
 import { BASE_URL, processResponse } from '../config';
+import { createNavigationContainerRef } from '@react-navigation/native';
 
 export const AuthContext = createContext();
 
-export const AuthProvider = ({children}) => {
+export const navigationRef = createNavigationContainerRef()
 
+export function navigate(name) {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name);
+  }
+}
+
+export const AuthProvider = ({children}) => {
     const [email, setEmail] = useState('');
     const [userToken, setUserToken] = useState();
     const [notVerified, setNotVerified] = useState();
+    const [passWord, setPassWord] = useState();
 
     const login = async (text_email, text_password) => {
         try{
@@ -30,6 +39,7 @@ export const AuthProvider = ({children}) => {
                         alert(data.message);
                         setNotVerified(data.verify_email);
                         setEmail(data.email);
+                        setPassWord(text_password);
                     } else {
                         alert(data.message);
                     }
@@ -65,6 +75,7 @@ export const AuthProvider = ({children}) => {
                 console.log("Status Code", statusCode);
                 console.log(data.message);
                 if(statusCode === 200){
+                    login(email, passWord);
                     setNotVerified(false);
                 } else if(statusCode === 422){
                     alert(data.message);
@@ -101,6 +112,7 @@ export const AuthProvider = ({children}) => {
                 const { statusCode, data } = res;
                 console.log("Status Code", statusCode);
                 alert(data.message);
+                navigate('Login');
             })
             .catch((e) => {
                 console.log(e);

@@ -15,6 +15,8 @@ export default function Chat() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 width: window_width,
+                borderBottomWidth: 1,
+                borderBottomColor: '#d3d3d3',
             }}
         >
             <SearchBar platform='ios' placeholder='Search messages' containerStyle={{width: window_width - 20,}}/>
@@ -24,52 +26,76 @@ export default function Chat() {
             width='1'
         /> */}
         <ScrollView style={{flex: 1, width: window_width}}>
-            <Button type='outlined'>
-                <View flexDirection='row' style={{width: window_width, height: 100, alignItems: 'center', paddingLeft: 15, paddingRight: 15}}>
+            <Button type='clear' containerStyle={{borderBottomWidth: 1, borderBottomColor: '#f3f3f3',}}>
+                <View
+                flexDirection='row' 
+                style={{
+                    width: window_width, 
+                    alignItems: 'center', 
+                    paddingLeft: 15, 
+                    paddingRight: 15,
+                    padding: 10
+                }}>
                     <Image
                         style={{
-                            tintColor: '#000000',
                             marginRight: 3,
-                            width: 75,
-                            height: 75
+                            width: 70,
+                            height: 70,
+                            borderRadius: 35
                         }}
-                        source={require('../../assets/account-circle-outline.png')}
+                        source={require('../../assets/person1.png')}
                     />
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1, paddingLeft: 20}}>
                         <Text style={{fontSize: 20, fontWeight: 'bold'}}>John Do</Text>
                         <Text numberOfLines={2}>Lorem ipsum dolor sit amet. Et iusto rerum et voluptas tempora ut sint reprehenderit nam odio fuga.</Text>
                     </View>
                 </View>
             </Button>
-            <Button type='clear'>
-                <View flexDirection='row' style={{width: window_width, height: 100, alignItems: 'center', paddingLeft: 15, paddingRight: 15}}>
+            <Button type='clear' containerStyle={{borderBottomWidth: 1, borderBottomColor: '#f3f3f3',}}>
+                <View
+                flexDirection='row' 
+                style={{
+                    width: window_width, 
+                    alignItems: 'center', 
+                    paddingLeft: 15, 
+                    paddingRight: 15,
+                    padding: 10
+                }}>
                     <Image
                         style={{
-                            tintColor: '#000000',
                             marginRight: 3,
-                            width: 75,
-                            height: 75
+                            width: 70,
+                            height: 70,
+                            borderRadius: 35
                         }}
-                        source={require('../../assets/account-circle-outline.png')}
+                        source={require('../../assets/person2.png')}
                     />
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1, paddingLeft: 20}}>
                         <Text style={{fontSize: 20, fontWeight: 'bold'}}>Ronny Pierre</Text>
                         <Text numberOfLines={2}>Lorem ipsum dolor sit amet.</Text>
                     </View>
                 </View>
             </Button>
-            <Button type='clear'>
-                <View flexDirection='row' style={{width: window_width, height: 100, alignItems: 'center', paddingLeft: 15, paddingRight: 15}}>
+            <Button type='clear' containerStyle={{borderBottomWidth: 1, borderBottomColor: '#f3f3f3',}}>
+                <View
+                flexDirection='row' 
+                style={{
+                    width: window_width, 
+                    alignItems: 'center', 
+                    paddingLeft: 15, 
+                    paddingRight: 15,
+                    padding: 10
+                }}>
                     <Image
                         style={{
-                            tintColor: '#000000',
                             marginRight: 3,
-                            width: 75,
-                            height: 75
+                            width: 70,
+                            height: 70,
+                            borderRadius: 35
                         }}
-                        source={require('../../assets/account-circle-outline.png')}
+                        source={require('../../assets/person3.png')}
                     />
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1, paddingLeft: 20}}>
                         <Text style={{fontSize: 20, fontWeight: 'bold'}}>Miguel Jones</Text>
                         <Text numberOfLines={2}>Et iusto rerum et voluptas tempora ut sint reprehenderit nam odio fuga.</Text>
                     </View>

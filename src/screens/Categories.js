@@ -17,7 +17,7 @@ export default function Categories({navigation}) {
             </Text>
         </View>
         <View flexDirection='row' style={custom_style.menu_container}>
-            <Button buttonStyle={custom_style.menu_button} onPress={() => navigation.navigate('Tabs')}>
+            <Button buttonStyle={custom_style.menu_button} onPress={() => navigation.navigate('CarTabs')}>
                 <Image style={{tintColor: 'white', width: 50, height: 50, marginRight: 3}} source={require('../../assets/car-sports.png')}/>
                 Cars
             </Button>
@@ -27,7 +27,7 @@ export default function Categories({navigation}) {
             </Button>
         </View>
         <View flexDirection='row' style={custom_style.menu_container}>
-            <Button buttonStyle={custom_style.menu_button}>
+            <Button buttonStyle={custom_style.menu_button} onPress={() => navigation.navigate('MotorcycleTabs')}>
             <Image style={{tintColor: 'white', width: 50, height: 50, marginRight: 3}} source={require('../../assets/motorbike.png')}/>
                 Motocycle
             </Button>
@@ -49,7 +49,7 @@ const custom_style = StyleSheet.create({
         width: 150,
         height: 150,
         margin: 10,
-        borderRadius: 20,
+        borderRadius: 10,
         flexDirection: 'column',
     },
     menu_container: {

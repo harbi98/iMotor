@@ -21,8 +21,8 @@ export default function Verification({navigation}) {
     }
     return (
     <SafeAreaView style={styles.container}>
-        <View style={{flex: 1, width: '90%', alignItems: 'center', justifyContent: 'center', paddingTop: 100}}>
-            <Image source={require('../../assets/otp_dialog.psd')} style={{width: 200, height: 200}}/>
+        <View style={{flex: 1, width: '90%', alignItems: 'center', justifyContent: 'center'}}>
+            <Image source={require('../../assets/otp_dialog.png')} style={{width: 200, height: 200}}/>
             <Text style={{fontWeight: 'bold', fontFamily: 'back-groove', fontSize: 40, marginBottom: 50}}>Verify your email</Text>
             <Text style={{fontSize: 15}}>Please enter the 6 digit code sent to</Text>
             <Text style={{fontSize: 15, fontWeight: 'bold'}}>{email}</Text>
