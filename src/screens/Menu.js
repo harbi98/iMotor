@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image, ScrollView, Platform, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image, ScrollView, Platform, TouchableHighlight, StatusBar } from 'react-native';
 import React, {useContext, useState} from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { styles } from '../public/Style';
@@ -11,30 +11,48 @@ export default function Menu({navigation}) {
     const {logout} = useContext(AuthContext);
 
     return (
-    <SafeAreaView style={styles.container}>
-        <ScrollView style={{flex: 1, width: window_width}}>
+    <View style={styles.container}>
+        <StatusBar
+            backgroundColor="#0a5ca8"
+            barStyle={'light-content'}
+        />
+        <ScrollView
+        style={{
+            flex: 1,
+            width: window_width,
+            marginBottom: Platform.OS === 'ios' ? 25 : 0,
+        }}>
             <View
                 style={{
                     width: window_width,
-                    height: 250,
+                    height: Platform.OS === 'ios' ? 200 + 50 : 200,
+                    paddingTop: Platform.OS === 'ios' ? 50 : 0,
                     backgroundColor: '#0a5ca8',
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}
             >
                 <View flexDirection='row' style={{width: '80%', alignItems: 'center'}}>
+                    <View
+                    style={{
+                        marginRight: 20,
+                        width: 120,
+                        height: 120,
+                        padding: 10
+                    }}>
                     <Image
                         style={{
                             tintColor: '#FFFFFF',
                             marginRight: 3,
-                            width: 120,
-                            height: 120
+                            width: '100%',
+                            height: '100%',
                         }}
-                        source={require('../../assets/account-circle-outline.png')}
+                        source={require('../../assets/circle-user.png')}
                     />
+                    </View>
                     <View style={{flex: 1}}>
-                        <Text numberOfLines={1} style={{fontSize: 35, color: '#FFFFFFFF'}}>Hi Juan</Text>
-                        <Text numberOfLines={1} style={{fontSize: 35, color: '#FFFFFFFF'}}>Dela Cruz</Text>
+                        <Text numberOfLines={1} style={{fontSize: 30, color: '#FFFFFFFF'}}>Hi Juan</Text>
+                        <Text numberOfLines={1} style={{fontSize: 30, color: '#FFFFFFFF'}}>Dela Cruz</Text>
                         <Text numberOfLines={1} style={{fontSize: 15, color: '#FFFFFFFF'}}>example@email.com</Text>
                     </View>
                 </View>
@@ -75,6 +93,38 @@ export default function Menu({navigation}) {
                                     source={require('../../assets/circle-user.png')}
                                 />
                                 <Text style={{marginLeft: 20}}>Profile</Text>
+                            </View>
+                            <Image
+                                style={{
+                                    tintColor: '#000000',
+                                    width: 25,
+                                    height: 25
+                                }}
+                                source={require('../../assets/chevron-right.png')}
+                            />
+                        </View>
+                    </TouchableHighlight>
+                    <TouchableHighlight
+                        underlayColor={'#ffffff'}
+                        activeOpacity={0.3}
+                        containerStyle={{
+                            height: 50,
+                        }}
+                        style={{height: 50, justifyContent: 'center'}}
+                        onPress={() => navigation.navigate("ChangePassword")}
+                    >
+                        <View style={{flexDirection: 'row', paddingRight: 30, paddingLeft: 30, justifyContent: 'space-between'}}>
+                            <View flexDirection='row' style={{width: '95%', alignItems: 'center'}}>
+                                <Image
+                                    style={{
+                                        tintColor: '#000000',
+                                        marginRight: 3,
+                                        width: 35,
+                                        height: 35
+                                    }}
+                                    source={require('../../assets/padlock.png')}
+                                />
+                                <Text style={{marginLeft: 20}}>Change Password</Text>
                             </View>
                             <Image
                                 style={{
@@ -411,7 +461,7 @@ export default function Menu({navigation}) {
             </View>
             <View style={{marginBottom: Platform.OS === 'ios' ? 70 : 80}}/>
         </ScrollView>
-    </SafeAreaView>
+    </View>
     )
 }
 

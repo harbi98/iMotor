@@ -1,11 +1,11 @@
 import { StyleSheet, Platform, StatusBar, Dimensions } from "react-native";
 const styles = StyleSheet.create({
     container: {
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+        //paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#ffffff',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     
 });

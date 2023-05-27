@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image, ScrollView, FlatList, TouchableHighlight } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image, ScrollView, TouchableHighlight, ImageBackground, StatusBar, Platform } from 'react-native';
+import React, {useEffect, useState, useContext} from 'react';
 import { styles } from '../../public/Style';
+import { AuthContext } from '../../context/AuthContext';
 import { SearchBar, Button, Skeleton } from '@rneui/themed';
 import { BASE_URL, processResponse } from '../../config';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -8,8 +9,12 @@ import { LinearGradient } from 'expo-linear-gradient';
 const window_width = Dimensions.get('window').width;
 
 const Home = () => {
+    const {userToken} = useContext(AuthContext);
+
     const [brands, setBrands] = useState([]);
     const [brandsLoading, setBrandsLoading] = useState(true);
+    const [premiumListings, setPremiumListings] = useState([]);
+    const [featuredListings, setFeaturedListings] = useState([]);
 
     const getBrands = () => {
         try{
@@ -35,13 +40,78 @@ const Home = () => {
             console.log(e);
         }
     }
+    const getPremiumListings = () => {
+        try{
+            fetch(BASE_URL+'listings/all/motorcycles',{
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    //'Authorization': `Bearer ${userToken}`,
+                },
+            })
+            .then(processResponse)
+            .then(res => {
+                const { statusCode, data } = res;
+                //console.log('Carlistings ' + statusCode);
+                if (statusCode === '200') {
+                    setPremiumListings(data.motorcycles);
+                }
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+        } catch (e){
+            console.log(e);
+        }
+    }
+    const getFeaturedListings = () => {
+        try{
+            fetch(BASE_URL+'listings/all/motorcycles',{
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    //'Authorization': `Bearer ${userToken}`,
+                },
+            })
+            .then(processResponse)
+            .then(res => {
+                const { statusCode, data } = res;
+                //console.log('Carlistings ' + statusCode);
+                if (statusCode === '200') {
+                    setFeaturedListings(data.motorcycles);
+                }
+            })
+            .catch((e) => {
+                console.log(e)
+            })
+        } catch (e){
+            console.log(e);
+        }
+    }
+    const numberWithCommas = (x) => {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
     useEffect(() => {
         getBrands();
+        getPremiumListings();
+        getFeaturedListings();
     }, [])
     return (
     <SafeAreaView style={styles.container}>
+        <StatusBar
+            backgroundColor="#ffffff"
+            barStyle={'dark-content'}
+        />
         <ScrollView>
-            <View style={{flex: 1, width: '100%', alignItems: 'center', justifyContent: 'center'}}>
+            <View
+            style={{
+                flex: 1, 
+                width: '100%', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+            }}>
                 <View
                     flexDirection='row'
                     style={{
@@ -50,7 +120,12 @@ const Home = () => {
                         width: window_width,
                     }}
                 >
-                    <SearchBar platform='ios' placeholder='Search listing' containerStyle={{width: window_width - 75,}}/>
+                    <SearchBar
+                        platform='ios'
+                        placeholder='Search listing'
+                        containerStyle={{width: window_width - 75, height: 40}}
+                        inputContainerStyle={{height: 40}}
+                    />
                     <Button type='clear' onPress={() => console.log(brands)}>
                         <Image
                             style={{
@@ -80,14 +155,189 @@ const Home = () => {
                         />
                     </View>
                     <ScrollView horizontal={true} style={{width: window_width * 0.9}}>
-                        <View style={{height: 100, width: 100, backgroundColor: 'grey', borderRadius: 10, marginRight: 15}}>
-                        </View>
-                        <View style={{height: 100, width: 100, backgroundColor: 'grey', borderRadius: 10, marginRight: 15}}>
-                        </View>
-                        <View style={{height: 100, width: 100, backgroundColor: 'grey', borderRadius: 10, marginRight: 15}}>
-                        </View>
-                        <View style={{height: 100, width: 100, backgroundColor: 'grey', borderRadius: 10, marginRight: 15}}>
-                        </View>
+                        {premiumListings.length > 0 ?
+                                premiumListings.map((listing, key) => {
+                                    return (
+                                        <TouchableHighlight
+                                        key={key}
+                                        underlayColor={'#ffffff'}
+                                        style={{
+                                            height: 150, 
+                                            width: 150, 
+                                            borderRadius: 10, 
+                                            marginRight: 10, 
+                                            margin: 3,
+                                            elevation: 3,
+                                            shadowColor: '#000',
+                                            shadowOffset: { width: 0, height: 1 },
+                                            shadowOpacity: 0.3,
+                                            shadowRadius: 2,
+                                        }}
+                                        onPress={() => console.log('ppressed')}
+                                        >
+                                            <>
+                                                <ImageBackground
+                                                    style={{height: 90, width: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#ffffff', alignItems: 'flex-end', padding: 5}}
+                                                    imageStyle={{borderTopLeftRadius: 10, borderTopRightRadius: 10}}
+                                                    source={{
+                                                        uri: listing.featured_photo
+                                                    }}
+                                                >
+                                                    <View style={{backgroundColor: 'red', padding: 5, borderRadius: 5, alignItems: 'center'}}>
+                                                        <Text style={{color: '#ffffff', fontSize: 9, fontWeight: '600'}}>PREMIUM</Text>
+                                                    </View>
+                                                </ImageBackground>
+                                                <View style={{height: 60, width: 150, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#ffffff', paddingLeft: 10, justifyContent: 'center'}}>
+                                                    <Text style={{fontWeight: 'bold', fontSize: 16}}>AED {numberWithCommas(listing.price)}</Text>
+                                                    <Text style={{fontWeight: 'bold', fontSize: 12}}>{listing.model}</Text>
+                                                    <Text style={{fontSize: 12}}>{listing.model_year} - {listing.mileage}</Text>
+                                                </View>
+                                            </>
+                                        </TouchableHighlight>
+                                    );
+                                })
+                            :
+                            <>
+                                <View
+                                style={{
+                                    height: 150, 
+                                    width: 150, 
+                                    borderRadius: 10, 
+                                    marginRight: 10, 
+                                    margin: 3,
+                                    elevation: 3,
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 1 },
+                                    shadowOpacity: 0.3,
+                                    shadowRadius: 2,
+                                }}
+                                >
+                                    <Skeleton
+                                        LinearGradientComponent={LinearGradient}
+                                        animation="wave"
+                                        width={150}
+                                        height={90}
+                                        borderTopLeftRadius={10}
+                                        borderTopRightRadius={10}
+                                    />
+                                    <View style={{height: 60, width: 150, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#ffffff', paddingLeft: 10, justifyContent: 'space-evenly'}}>
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'80%'}
+                                            height={16}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'50%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'60%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                    </View>
+                                </View>
+                                <View
+                                style={{
+                                    height: 150, 
+                                    width: 150, 
+                                    borderRadius: 10, 
+                                    marginRight: 10, 
+                                    margin: 3,
+                                    elevation: 3,
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 1 },
+                                    shadowOpacity: 0.3,
+                                    shadowRadius: 2,
+                                }}
+                                >
+                                    <Skeleton
+                                        LinearGradientComponent={LinearGradient}
+                                        animation="wave"
+                                        width={150}
+                                        height={90}
+                                        borderTopLeftRadius={10}
+                                        borderTopRightRadius={10}
+                                    />
+                                    <View style={{height: 60, width: 150, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#ffffff', paddingLeft: 10, justifyContent: 'space-evenly'}}>
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'80%'}
+                                            height={16}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'50%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'60%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                    </View>
+                                </View>
+                                <View
+                                style={{
+                                    height: 150, 
+                                    width: 150, 
+                                    borderRadius: 10, 
+                                    marginRight: 10, 
+                                    margin: 3,
+                                    elevation: 3,
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 1 },
+                                    shadowOpacity: 0.3,
+                                    shadowRadius: 2,
+                                }}
+                                >
+                                    <Skeleton
+                                        LinearGradientComponent={LinearGradient}
+                                        animation="wave"
+                                        width={150}
+                                        height={90}
+                                        borderTopLeftRadius={10}
+                                        borderTopRightRadius={10}
+                                    />
+                                    <View style={{height: 60, width: 150, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#ffffff', paddingLeft: 10, justifyContent: 'space-evenly'}}>
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'80%'}
+                                            height={16}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'50%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'60%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                    </View>
+                                </View>
+                            </>
+                        }
                     </ScrollView>
                 </View>
                 <View style={{width: window_width, alignItems: 'center', marginBottom: 20}}>
@@ -107,14 +357,189 @@ const Home = () => {
                         />
                     </View>
                     <ScrollView horizontal={true} style={{width: window_width * 0.9}}>
-                        <View style={{height: 100, width: 100, backgroundColor: 'grey', borderRadius: 10, marginRight: 15}}>
-                        </View>
-                        <View style={{height: 100, width: 100, backgroundColor: 'grey', borderRadius: 10, marginRight: 15}}>
-                        </View>
-                        <View style={{height: 100, width: 100, backgroundColor: 'grey', borderRadius: 10, marginRight: 15}}>
-                        </View>
-                        <View style={{height: 100, width: 100, backgroundColor: 'grey', borderRadius: 10, marginRight: 15}}>
-                        </View>
+                        {featuredListings.length > 0 ?
+                                featuredListings.map((listing, key) => {
+                                    return (
+                                        <TouchableHighlight
+                                        key={key}
+                                        underlayColor={'#ffffff'}
+                                        style={{
+                                            height: 150, 
+                                            width: 150, 
+                                            borderRadius: 10, 
+                                            marginRight: 10, 
+                                            margin: 3,
+                                            elevation: 3,
+                                            shadowColor: '#000',
+                                            shadowOffset: { width: 0, height: 1 },
+                                            shadowOpacity: 0.3,
+                                            shadowRadius: 2,
+                                        }}
+                                        onPress={() => console.log('ppressed')}
+                                        >
+                                            <>
+                                                <ImageBackground
+                                                    style={{height: 90, width: 150, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: '#ffffff', alignItems: 'flex-end', padding: 5}}
+                                                    imageStyle={{borderTopLeftRadius: 10, borderTopRightRadius: 10}}
+                                                    source={{
+                                                        uri: listing.featured_photo
+                                                    }}
+                                                >
+                                                    <View style={{backgroundColor: '#0a5ba3', padding: 5, borderRadius: 5, alignItems: 'center'}}>
+                                                        <Text style={{color: '#ffffff', fontSize: 9, fontWeight: '600'}}>FEATURED</Text>
+                                                    </View>
+                                                </ImageBackground>
+                                                <View style={{height: 60, width: 150, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#ffffff', paddingLeft: 10, justifyContent: 'center'}}>
+                                                    <Text style={{fontWeight: 'bold', fontSize: 16}}>AED {numberWithCommas(listing.price)}</Text>
+                                                    <Text style={{fontWeight: 'bold', fontSize: 12}}>{listing.model}</Text>
+                                                    <Text style={{fontSize: 12}}>{listing.model_year} - {listing.mileage}</Text>
+                                                </View>
+                                            </>
+                                        </TouchableHighlight>
+                                    );
+                                })
+                            :
+                            <>
+                                <View
+                                style={{
+                                    height: 150, 
+                                    width: 150, 
+                                    borderRadius: 10, 
+                                    marginRight: 10, 
+                                    margin: 3,
+                                    elevation: 3,
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 1 },
+                                    shadowOpacity: 0.3,
+                                    shadowRadius: 2,
+                                }}
+                                >
+                                    <Skeleton
+                                        LinearGradientComponent={LinearGradient}
+                                        animation="wave"
+                                        width={150}
+                                        height={90}
+                                        borderTopLeftRadius={10}
+                                        borderTopRightRadius={10}
+                                    />
+                                    <View style={{height: 60, width: 150, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#ffffff', paddingLeft: 10, justifyContent: 'space-evenly'}}>
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'80%'}
+                                            height={16}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'50%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'60%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                    </View>
+                                </View>
+                                <View
+                                style={{
+                                    height: 150, 
+                                    width: 150, 
+                                    borderRadius: 10, 
+                                    marginRight: 10, 
+                                    margin: 3,
+                                    elevation: 3,
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 1 },
+                                    shadowOpacity: 0.3,
+                                    shadowRadius: 2,
+                                }}
+                                >
+                                    <Skeleton
+                                        LinearGradientComponent={LinearGradient}
+                                        animation="wave"
+                                        width={150}
+                                        height={90}
+                                        borderTopLeftRadius={10}
+                                        borderTopRightRadius={10}
+                                    />
+                                    <View style={{height: 60, width: 150, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#ffffff', paddingLeft: 10, justifyContent: 'space-evenly'}}>
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'80%'}
+                                            height={16}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'50%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'60%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                    </View>
+                                </View>
+                                <View
+                                style={{
+                                    height: 150, 
+                                    width: 150, 
+                                    borderRadius: 10, 
+                                    marginRight: 10, 
+                                    margin: 3,
+                                    elevation: 3,
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 1 },
+                                    shadowOpacity: 0.3,
+                                    shadowRadius: 2,
+                                }}
+                                >
+                                    <Skeleton
+                                        LinearGradientComponent={LinearGradient}
+                                        animation="wave"
+                                        width={150}
+                                        height={90}
+                                        borderTopLeftRadius={10}
+                                        borderTopRightRadius={10}
+                                    />
+                                    <View style={{height: 60, width: 150, borderBottomLeftRadius: 10, borderBottomRightRadius: 10, backgroundColor: '#ffffff', paddingLeft: 10, justifyContent: 'space-evenly'}}>
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'80%'}
+                                            height={16}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'50%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                        <Skeleton
+                                            LinearGradientComponent={LinearGradient}
+                                            animation="wave"
+                                            width={'60%'}
+                                            height={12}
+                                            borderRadius={5}
+                                        />
+                                    </View>
+                                </View>
+                            </>
+                        }
                     </ScrollView>
                 </View>
                 <View style={{flex: 1,width: window_width * 0.9, marginBottom: 10}}>

@@ -43,10 +43,10 @@ const Tabs = () => {
             screenOptions={{
                 tabBarShowLabel: false,
                 headerShown: false,
-                //tabBarHideOnKeyboard: true,
+                tabBarHideOnKeyboard: true,
                 tabBarStyle: {
                     position: 'absolute', 
-                    height: Platform.OS === 'ios' ? 100 : 70,
+                    height: Platform.OS === 'ios' ? 80 : 60,
                     backgroundColor: '#0a5ca8',
                     tabBarStyle: { position: 'absolute' },
                     paddingBottom: Platform.OS === 'ios' ? 30 : 15,
@@ -93,21 +93,24 @@ const Tabs = () => {
                 }}
             />
             <Tab.Screen
-                name="Add Listing"
+                name="Create Listing"
                 component={AddListing}
                 options={{
-                    tabBarIcon: ((focused) => (
-                        <Image
-                            source={require('../../../assets/square-plus.png')}
-                            resizeMode='contain'
-                            style={{
-                                tintColor: '#ffffff',
-                                width: 30,
-                                height: 30,
-                            }}
-                        />
-                    )),
-                    tabBarButton: (props) => (<CustomTabBarButton {...props}/>)
+                    tabBarIcon: ({focused}) => (
+                        <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                            <Image
+                                source={require('../../../assets/square-plus.png')}
+                                resizeMode='contain'
+                                style={{
+                                    tintColor: focused ? '#ffffff' : '#cccccc',
+                                    width: 30,
+                                    height: 30,
+                                }}
+                            />
+                            {focused ? <Text style={{color: '#ffffff', fontSize: 9}}>Create Listing</Text> : ''}
+                        </View>
+                    ),
+                    // tabBarButton: (props) => (<CustomTabBarButton {...props}/>)
                 }}
             />
             <Tab.Screen
@@ -143,9 +146,10 @@ const Tabs = () => {
                                 }}
                                 source={require('../../../assets/user-gear.png')}
                             />
-                            {focused ? <Text style={{color: '#ffffff', fontSize: 9}}>Options</Text> : ''}
+                            {focused ? <Text style={{color: '#ffffff', fontSize: 9}}>Setting</Text> : ''}
                         </View>
                     ),
+                    unmountOnBlur: true
                 }}
             />
         </Tab.Navigator>

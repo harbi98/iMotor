@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, Image } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, Image, TouchableHighlight, StatusBar, Platform } from 'react-native';
 import React from 'react';
 import { styles } from '../public/Style';
-import { SearchBar, Button, Divider } from '@rneui/themed';
+import { SearchBar, Button } from '@rneui/themed';
 
 const window_width = Dimensions.get('window').width;
 const window_height = Dimensions.get('window').height;
@@ -9,6 +9,10 @@ const window_height = Dimensions.get('window').height;
 export default function Chat() {
   return (
     <SafeAreaView style={styles.container}>
+        <StatusBar
+            backgroundColor="#ffffff"
+            barStyle={'dark-content'}
+        />
         <View
             flexDirection='row'
             style={{
@@ -17,16 +21,28 @@ export default function Chat() {
                 width: window_width,
                 borderBottomWidth: 1,
                 borderBottomColor: '#d3d3d3',
+                paddingTop: 3,
+                paddingBottom: 10,
             }}
         >
-            <SearchBar platform='ios' placeholder='Search messages' containerStyle={{width: window_width - 20,}}/>
+            <SearchBar
+                platform='ios'
+                placeholder='Search messages'
+                containerStyle={{width: window_width - 20, height: 40}}
+                inputContainerStyle={{height: 40}}
+            />
         </View>
         {/* <Divider 
             style={{ width: window_width * 0.9, marginTop: 2, marginBottom: 15 }}
             width='1'
         /> */}
         <ScrollView style={{flex: 1, width: window_width}}>
-            <Button type='clear' containerStyle={{borderBottomWidth: 1, borderBottomColor: '#f3f3f3',}}>
+            <TouchableHighlight
+                underlayColor={'#ffffff'}
+                activeOpacity={0.2}
+                style={{borderBottomWidth: 1, borderBottomColor: '#f3f3f3'}}
+                onPress={() => console.log('pressed')}
+            >
                 <View
                 flexDirection='row' 
                 style={{
@@ -50,8 +66,13 @@ export default function Chat() {
                         <Text numberOfLines={2}>Lorem ipsum dolor sit amet. Et iusto rerum et voluptas tempora ut sint reprehenderit nam odio fuga.</Text>
                     </View>
                 </View>
-            </Button>
-            <Button type='clear' containerStyle={{borderBottomWidth: 1, borderBottomColor: '#f3f3f3',}}>
+            </TouchableHighlight>
+            <TouchableHighlight
+                underlayColor={'#ffffff'}
+                activeOpacity={0.2}
+                style={{borderBottomWidth: 1, borderBottomColor: '#f3f3f3'}}
+                onPress={() => console.log('pressed')}
+            >
                 <View
                 flexDirection='row' 
                 style={{
@@ -75,8 +96,13 @@ export default function Chat() {
                         <Text numberOfLines={2}>Lorem ipsum dolor sit amet.</Text>
                     </View>
                 </View>
-            </Button>
-            <Button type='clear' containerStyle={{borderBottomWidth: 1, borderBottomColor: '#f3f3f3',}}>
+            </TouchableHighlight>
+            <TouchableHighlight
+                underlayColor={'#ffffff'}
+                activeOpacity={0.2}
+                style={{borderBottomWidth: 1, borderBottomColor: '#f3f3f3'}}
+                onPress={() => console.log('pressed')}
+            >
                 <View
                 flexDirection='row' 
                 style={{
@@ -100,7 +126,7 @@ export default function Chat() {
                         <Text numberOfLines={2}>Et iusto rerum et voluptas tempora ut sint reprehenderit nam odio fuga.</Text>
                     </View>
                 </View>
-            </Button>
+            </TouchableHighlight>
         </ScrollView>
     </SafeAreaView>
   )

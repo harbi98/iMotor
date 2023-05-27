@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image, ScrollView, FlatList, TouchableHighlight, ImageBackground } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Dimensions, Image, ScrollView, TouchableHighlight, ImageBackground, Platform, StatusBar } from 'react-native';
 import React, {useEffect, useState, useContext} from 'react';
 import { styles } from '../../public/Style';
 import { AuthContext } from '../../context/AuthContext';
@@ -53,7 +53,7 @@ const Home = () => {
             .then(processResponse)
             .then(res => {
                 const { statusCode, data } = res;
-                console.log('Carlistings ' + statusCode);
+                //console.log('Carlistings ' + statusCode);
                 setPremiumListings(data.cars);
             })
             .catch((e) => {
@@ -76,7 +76,7 @@ const Home = () => {
             .then(processResponse)
             .then(res => {
                 const { statusCode, data } = res;
-                console.log('Carlistings ' + statusCode);
+                //console.log('Carlistings ' + statusCode);
                 setFeaturedListings(data.cars);
             })
             .catch((e) => {
@@ -96,8 +96,18 @@ const Home = () => {
     }, [])
     return (
     <SafeAreaView style={styles.container}>
+        <StatusBar
+            backgroundColor="#ffffff"
+            barStyle={'dark-content'}
+        />
         <ScrollView>
-            <View style={{flex: 1, width: '100%', alignItems: 'center', justifyContent: 'center'}}>
+            <View
+            style={{
+                flex: 1, 
+                width: '100%', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+            }}>
                 <View
                     flexDirection='row'
                     style={{
@@ -106,7 +116,12 @@ const Home = () => {
                         width: window_width,
                     }}
                 >
-                    <SearchBar platform='ios' placeholder='Search listing' containerStyle={{width: window_width - 75,}}/>
+                    <SearchBar
+                        platform='ios'
+                        placeholder='Search listing'
+                        containerStyle={{width: window_width - 75, height: 40}}
+                        inputContainerStyle={{height: 40}}
+                    />
                     <Button type='clear' onPress={() => console.log(brands)}>
                         <Image
                             style={{

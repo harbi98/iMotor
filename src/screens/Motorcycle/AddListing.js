@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View, SafeAreaView, Dimensions, TextInput, ImageBackground, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, Dimensions, TextInput, ImageBackground, Image, ScrollView, Keyboard, Platform, StatusBar } from 'react-native';
 import { ProgressSteps, ProgressStep } from 'react-native-progress-steps';
-import React, {useState, useEffect, useContext, useRef} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { styles } from '../../public/Style';
 import { BASE_URL, processResponse } from '../../config';
 import { ListItem, Avatar, Button, Chip } from '@rneui/themed';
 import { AuthContext } from '../../context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
 import {actions, RichEditor, RichToolbar} from "react-native-pell-rich-editor";
-import QuillEditor, { QuillToolbar } from 'react-native-cn-quill';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 const window_width = Dimensions.get('window').width;
@@ -16,6 +16,8 @@ const handleHead = ({tintColor}) => <Text style={{color: tintColor}}>H1</Text>
 
 export default function AddListing() {
     const {userToken} = useContext(AuthContext);
+
+    const [buttonsVisible, setButtonsVisible] = useState(false);
 
     const RichText = React.useRef();
 
@@ -53,6 +55,7 @@ export default function AddListing() {
     const [maximumPower, setMaximumPower] = useState();
     const [maximumTorque, setMaximumTorque] = useState();
     const [numberOfCylinders, setNumberOfCylinders] = useState();
+    const [numberOfStrokes, setNumberOfStrokes] = useState();
     const [primaryColor, setPrimaryColor] = useState();
     const [secondaryColor, setSecondaryColor] = useState();
     const [batteryVoltage, setBatteryVoltage] = useState();
@@ -60,21 +63,8 @@ export default function AddListing() {
     const [rearBrake, setRearBrake] = useState();
     const [frontSuspension, setFrontSuspension] = useState();
     const [rearSuspension, setRearSuspension] = useState();
-
-    const source = {
-        html: `
-        <p><span style="color: rgb(72, 72, 72);">The&nbsp;</span><a href="https://www.zigwheels.ph/new-motorcycles/honda/click-160" rel="noopener noreferrer" target="_blank" style="color: rgb(219, 21, 31);">Click 160</a><span style="color: rgb(72, 72, 72);">, a new Scooter from Honda comes in 1 variants. The top variant of Click 160 is powered by the Standard a 157 cc, 1 cylinder Gasoline engine that fires 15 hp of power and 13.8 Nm torque. The 2 seater&nbsp;</span><a href="https://www.zigwheels.ph/new-motorcycles/honda/click-160/standard" rel="noopener noreferrer" target="_blank" style="color: rgb(219, 21, 31);">Click 160 Standard</a><span style="color: rgb(72, 72, 72);">&nbsp;Variable Speed comes with CVT transmission. For added safety are provided central locking &amp; power door locks.</span></p>
-        `
-    };
-
-    const htmlToReact = () => {
-        return (
-            <RenderHtml
-                contentWidth={window_width*0.1}
-                source={source}
-            />
-        )
-    }
+    const [coolingSystem, setCoolingSystem] = useState();
+    const [startOption, setStartOption] = useState();
 
     const addAmenities = (amenity) => {
         if(allAmenities) {
@@ -132,7 +122,7 @@ export default function AddListing() {
         });
 
         if (!result.canceled) {
-        setImage(result.assets[0].base64);
+        setImage('data:image/webp;base64,'+result.assets[0].base64);
         }
     };
 
@@ -217,11 +207,12 @@ export default function AddListing() {
                     vehicle_type: 'motorcycle',
                     brand_id: selectedBrandID,
                     location_id: selectedLocationID,
-                    featured_photo: 'data:image/webp;base64,'+image,
+                    featured_photo: image,
                     transmission: transmission,
                     maximum_power: maximumPower,
                     maximum_torque: maximumTorque,
                     no_of_cylinder: numberOfCylinders,
+                    no_of_strokes: numberOfStrokes,
                     engine_type: engineType,
                     fuel_type: fuelType,
                     body_type: bodyType,
@@ -232,13 +223,22 @@ export default function AddListing() {
                     front_brake: frontBrake,
                     front_suspension: frontSuspension,
                     rear_suspension: rearSuspension,
+                    cooling_system: coolingSystem,
+                    start_option: startOption,
                 })
             })
             .then(processResponse)
             .then(res => {
                 const { statusCode, data } = res;
                 console.log("Status Code", statusCode);
-                alert(data.message);
+                if(statusCode === 200) {
+                    setPrice(null);
+                    setDescriptionText(null);
+                    setModel(null);
+                    setYearModel(null);
+                    setVariant(null);
+                    setMileage(null);
+                }
             })
             .catch((e) => {
                 console.log(e);
@@ -251,11 +251,29 @@ export default function AddListing() {
     useEffect(() => {
         getBrands();
         getLocations();
+        const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+            setButtonsVisible(true);
+        });
+        const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+            setButtonsVisible(false)
+        });
+        return () => {
+            showSubscription.remove();
+            hideSubscription.remove();
+        }
     }, [])
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar
+                backgroundColor="#ffffff"
+                barStyle={'dark-content'}
+            />
             <View style={custom_style.container}>
-                <View style={{flex: 1, width: window_width * 0.9}}>
+                <View
+                style={{
+                    flex: 1, 
+                    width: window_width * 0.9,
+                }}>
                     <ProgressSteps
                         labelFontSize={9}
                     >
@@ -264,13 +282,14 @@ export default function AddListing() {
                             nextBtnText="Next"
                             nextBtnStyle={custom_style.form_btn}
                             nextBtnTextStyle={custom_style.form_btn_txt}
-                            viewProps={{flex: 1, marginBottom: 10, paddingLeft: 5, paddingRight: 5}}
+                            viewProps={{ flex: 1, marginBottom: buttonsVisible ? -60 : 10, paddingLeft: 5, paddingRight: 5 }}
+                            removeBtnRow={buttonsVisible}
                             scrollable={false}
                         >
-                            <ScrollView style={{width: '100%'}}>
+                            <KeyboardAwareScrollView>
                                 <View style={custom_style.form_container}>
                                     <ImageBackground
-                                        source={image ? {uri: 'data:image/jpg;base64,'+image} : require('../../../assets/motorcycle.png')}
+                                        source={image ? {uri: image} : require('../../../assets/motorcycle.png')}
                                         style={{width: '100%', height: 170, backgroundColor: '#C0C0C0', borderRadius: 5, justifyContent: 'flex-end', alignItems: 'flex-end'}}
                                         imageStyle={{borderRadius: 5}}
                                     >
@@ -432,8 +451,7 @@ export default function AddListing() {
                                         onChangeText={(e) => setPrice(e)}
                                     />
                                 </View>
-                                <View style={{marginBottom: 20}}></View>
-                            </ScrollView>
+                            </KeyboardAwareScrollView>
                         </ProgressStep>
                         <ProgressStep
                             label="Description" 
@@ -441,37 +459,51 @@ export default function AddListing() {
                             nextBtnStyle={custom_style.form_btn}
                             nextBtnTextStyle={custom_style.form_btn_txt}
                             previousBtnTextStyle={custom_style.form_btn_txt}
-                            viewProps={{flex: 1, marginBottom: 10}}
+                            viewProps={{ flex: 1, marginBottom: buttonsVisible ? -60 : 10}}
+                            removeBtnRow={buttonsVisible}
                             scrollable={false}
                         >
-                            <View style={{
-                                height: '100%',
-                                backgroundColor: '#ffffff',
-                                borderRadius: 5,
-                                elevation: 5,
-                                borderColor: '#A7AE9C',
-                                shadowColor: '#000',
-                                shadowOffset: { width: 0, height: 2 },
-                                shadowOpacity: 0.3,
-                                shadowRadius: 2,
-                            }}>
-                                <RichToolbar
-                                    editor={RichText}
-                                    selectedIconTint="#0a5ca8"
-                                    iconTint="#312921"
-                                    style={{borderTopLeftRadius: 5, borderTopRightRadius: 5}}
-                                />
-                                <RichEditor
-                                    initialContentHTML={'Hello <b>World</b> <p>this is a new paragraph</p> <p>this is another new paragraph</p>'}
-                                    ref={RichText}
-                                    value={descriptionText}
-                                    onChange={(e) => setDescriptionText(e)}
-                                    containerStyle={{borderBottomLeftRadius: 5,borderBottomRightRadius: 5}}
-                                    style={{
-                                        flex: 1,
-                                    }}
-                                />
-                            </View>
+                            <KeyboardAwareScrollView style={{flex: 1}} contentContainerStyle={{flexGrow: 1}}>
+                                <View style={{
+                                    flexGrow: 1,
+                                    margin: 5,
+                                    backgroundColor: '#ffffff',
+                                    borderRadius: 5,
+                                    elevation: 3,
+                                    borderColor: '#A7AE9C',
+                                    shadowColor: '#000',
+                                    shadowOffset: { width: 0, height: 2 },
+                                    shadowOpacity: 0.3,
+                                    shadowRadius: 2,
+                                }}>
+                                    <RichToolbar
+                                        editor={RichText}
+                                        selectedIconTint="#0a5ca8"
+                                        iconTint="#312921"
+                                        style={{borderTopLeftRadius: 5, borderTopRightRadius: 5}}
+                                        actions={[
+                                            actions.setBold,
+                                            actions.setItalic,
+                                            actions.setUnderline,
+                                            actions.insertBulletsList,
+                                            actions.insertOrderedList,
+                                            actions.insertLink,
+                                            actions.undo,
+                                            actions.redo,
+                                        ]}
+                                    />
+                                    <RichEditor
+                                        //initialContentHTML={'Hello <b>World</b> <p>this is a new paragraph</p> <p>this is another new paragraph</p>'}
+                                        ref={RichText}
+                                        value={descriptionText}
+                                        onChange={(e) => setDescriptionText(e)}
+                                        containerStyle={{borderBottomLeftRadius: 5,borderBottomRightRadius: 5}}
+                                        style={{
+                                            flex: 1,
+                                        }}
+                                    />
+                                </View>
+                            </KeyboardAwareScrollView>
                         </ProgressStep>
                         <ProgressStep
                             label="Attributes" 
@@ -479,10 +511,11 @@ export default function AddListing() {
                             nextBtnStyle={custom_style.form_btn}
                             nextBtnTextStyle={custom_style.form_btn_txt}
                             previousBtnTextStyle={custom_style.form_btn_txt}
-                            viewProps={{flex: 1, marginBottom: 10, paddingLeft: 5, paddingRight: 5}}
+                            viewProps={{ flex: 1, marginBottom: buttonsVisible ? -60 : 10, paddingLeft: 5, paddingRight: 5 }}
+                            removeBtnRow={buttonsVisible}
                             scrollable={false}
                         >
-                            <ScrollView style={{width: '100%'}}>
+                            <KeyboardAwareScrollView>
                                 <View style={custom_style.form_container}>
                                     <Text>Body Type</Text>
                                     <TextInput
@@ -621,15 +654,45 @@ export default function AddListing() {
                                         />
                                     </View>
                                 </View>
-                                <Text>Number of Cylinders</Text>
-                                <TextInput
-                                    autoCapitalize='none'
-                                    style={custom_style.input}
-                                    value={numberOfCylinders}
-                                    onChangeText={(e) => setNumberOfCylinders(e)}
-                                />
-                                <View style={{marginBottom: 20}}></View>
-                            </ScrollView>
+                                <View flexDirection='row' style={custom_style.form_container}>
+                                    <View style={{flex: 1, paddingRight: 5}}>
+                                        <Text>Number of Cylinders</Text>
+                                        <TextInput
+                                            autoCapitalize='none'
+                                            style={custom_style.input}
+                                            value={numberOfCylinders}
+                                            onChangeText={(e) => setNumberOfCylinders(e)}
+                                        />
+                                    </View>
+                                    <View style={{flex: 1, paddingLeft: 5}}>
+                                        <Text>Number of Stroke</Text>
+                                        <TextInput
+                                            autoCapitalize='none'
+                                            style={custom_style.input}
+                                            value={numberOfStrokes}
+                                            onChangeText={(e) => setNumberOfStrokes(e)}
+                                        />
+                                    </View>
+                                </View>
+                                <View style={custom_style.form_container}>
+                                    <Text>Cooling System</Text>
+                                    <TextInput
+                                        autoCapitalize='none'
+                                        style={custom_style.input}
+                                        value={coolingSystem}
+                                        onChangeText={(e) => setCoolingSystem(e)}
+                                    />
+                                </View>
+                                <View style={custom_style.form_container}>
+                                    <Text>Start Option</Text>
+                                    <TextInput
+                                        autoCapitalize='none'
+                                        style={custom_style.input}
+                                        value={startOption}
+                                        onChangeText={(e) => setStartOption(e)}
+                                    />
+                                </View>
+                            </KeyboardAwareScrollView>
                         </ProgressStep>
                         <ProgressStep
                             label="Amenities" 
@@ -637,7 +700,8 @@ export default function AddListing() {
                             nextBtnStyle={custom_style.form_btn}
                             nextBtnTextStyle={custom_style.form_btn_txt}
                             previousBtnTextStyle={custom_style.form_btn_txt}
-                            viewProps={{flex: 1, marginBottom: 10, paddingLeft: 5, paddingRight: 5}}
+                            viewProps={{ flex: 1, marginBottom: buttonsVisible ? -60 : 10, paddingLeft: 5, paddingRight: 5 }}
+                            removeBtnRow={buttonsVisible}
                             scrollable={false}
                         >
                             <ScrollView style={{width: '100%'}}>
@@ -685,17 +749,17 @@ export default function AddListing() {
                                         null
                                     }
                                 </View>
-                                <View style={{marginBottom: 20}}></View>
                             </ScrollView>
                         </ProgressStep>
                         <ProgressStep
                             scrollViewProps={{borderColor: 'grey', borderBottomWidth: 1}}
                             label="Safety Features" 
                             previousBtnStyle={custom_style.form_btn} 
-                            nextBtnStyle={custom_style.form_btn}
+                            nextBtnStyle={custom_style.form_btn_proceed}
                             nextBtnTextStyle={custom_style.form_btn_txt}
                             previousBtnTextStyle={custom_style.form_btn_txt}
-                            viewProps={{flex: 1, marginBottom: 10, paddingLeft: 5, paddingRight: 5}}
+                            viewProps={{ flex: 1, marginBottom: buttonsVisible ? -60 : 10, paddingLeft: 5, paddingRight: 5 }}
+                            removeBtnRow={buttonsVisible}
                             scrollable={false}
                             onSubmit={() => createListing()}
                         >
@@ -744,7 +808,6 @@ export default function AddListing() {
                                         null
                                     }
                                 </View>
-                                <View style={{marginBottom: 20}}></View>
                             </ScrollView>
                         </ProgressStep>
                     </ProgressSteps>
@@ -790,45 +853,41 @@ const custom_style = StyleSheet.create({
         marginBottom: 10,
     },
     form_btn_proceed: {
-        width: 100, 
-        height: 50, 
         alignItems: 'center',
         justifyContent: 'center', 
-        backgroundColor: '#8bc63f',
+        //backgroundColor: '#8bc63f',
         paddingLeft: 15,
         paddingRight: 15,
         paddingTop: 10,
-        paddingBottom: 10,
-        borderRadius: 5,
-        marginRight: 50,
-        marginBottom: 30,
-        elevation: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-    },
-    form_btn: {
-        width: 100, 
-        height: 50, 
-        alignItems: 'center',
-        justifyContent: 'center', 
-        backgroundColor: '#8bc63f',
-        paddingLeft: 15,
-        paddingRight: 15,
-        paddingTop: 10,
-        paddingBottom: 10,
-        borderRadius: 5,
+        paddingBottom: Platform.OS === 'ios' ? 10 : 20,
         marginRight: -30,
         marginLeft: -30,
-        elevation: 5,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
+        // shadowColor: '#000',
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.3,
+        // shadowRadius: 2,
+    },
+    form_btn: {
+        alignItems: 'center',
+        justifyContent: 'center', 
+        //backgroundColor: '#8bc63f',
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingTop: 10,
+        paddingBottom: Platform.OS === 'ios' ? 10 : 20,
+        marginRight: -30,
+        marginLeft: -30,
+        // shadowColor: '#000',
+        // shadowOffset: { width: 0, height: 2 },
+        // shadowOpacity: 0.3,
+        // shadowRadius: 2,
     },
     form_btn_txt: {
-        color: '#ffffff',
-        fontSize: 14
+        color: '#0a5ca8',
+        fontSize: 18,
+        fontWeight: '500',
+        textShadowColor: 'rgba(0, 0, 0, 0.3)',
+        textShadowOffset: {width: -1, height: 2},
+        textShadowRadius: 3
     }
 })

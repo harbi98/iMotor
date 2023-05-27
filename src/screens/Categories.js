@@ -1,4 +1,4 @@
-import { StyleSheet, Text, SafeAreaView, Dimensions, Image, View } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Dimensions, Image, View, StatusBar } from 'react-native';
 import React from 'react';
 import { styles } from '../public/Style';
 import { Button } from '@rneui/themed';
@@ -9,8 +9,12 @@ const window_height = Dimensions.get('window').height;
 export default function Categories({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
+        <StatusBar
+            backgroundColor="#ffffff"
+            barStyle={'dark-content'}
+        />
         <Image resizeMode='contain' style={custom_style.app_title} source={require('../../assets/iMotor.png')}/>
-        <View style={{ width: 340, marginBottom: 20 }}>
+        <View style={{ width: 320, marginBottom: 20 }}>
             <Text style={{textAlign: 'center'}}>
                 Lorem ipsum dolor sit amet. 
                 Et iusto rerum et voluptas tempora ut sint reprehenderit nam odio fuga.

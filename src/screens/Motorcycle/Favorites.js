@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, Image } from 'react-native';
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, Image, Platform, StatusBar } from 'react-native';
 import React from 'react';
 import { styles } from '../../public/Style';
 import { SearchBar, Button, Divider } from '@rneui/themed';
@@ -9,6 +9,10 @@ const window_height = Dimensions.get('window').height;
 export default function Favorites() {
   return (
     <SafeAreaView style={styles.container}>
+        <StatusBar
+            backgroundColor="#ffffff"
+            barStyle={'dark-content'}
+        />
         <View
             flexDirection='row'
             style={{
@@ -16,10 +20,16 @@ export default function Favorites() {
                 alignItems: 'center',
                 width: window_width,
                 borderBottomWidth: 1,
-                borderBottomColor: '#D3D3D3'
+                borderBottomColor: '#D3D3D3',
+                paddingBottom: 10,
             }}
         >
-            <SearchBar platform='ios' placeholder='Search favorites' containerStyle={{width: window_width - 20,}}/>
+            <SearchBar
+                platform='ios'
+                placeholder='Search favorites'
+                containerStyle={{width: window_width - 20, height: 40}}
+                inputContainerStyle={{height: 40}}
+            />
         </View>
         <ScrollView style={{flex: 1, width: window_width}}>
             <View

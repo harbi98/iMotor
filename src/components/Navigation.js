@@ -12,6 +12,10 @@ import MotorcycleTabs from '../screens/Motorcycle/Tabs';
 import Profile from '../screens/Profile';
 import MyListings from '../screens/MyListings';
 import Subscription from '../screens/Subscription';
+import ForgotPassword from '../screens/ForgotPassword';
+import ChangePassword from '../screens/ChangePassword';
+import VerifyForgotPassword from '../screens/VerifyForgotPassword';
+import ResetPassword from '../screens/ResetPassword';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,11 +36,15 @@ export default function Navigation() {
                                     <Stack.Screen name='Profile' component={Profile} options={{ headerShown: false }}/>
                                     <Stack.Screen name='MyListings' component={MyListings} options={{ headerShown: false }}/>
                                     <Stack.Screen name='Subscription' component={Subscription} options={{ headerShown: false }}/>
+                                    <Stack.Screen name='ChangePassword' component={ChangePassword} options={{ headerShown: false }}/>
                                 </>
                             :
                                 <>
                                     <Stack.Screen name='Login' component={Login} options={{ headerShown: false }}/>
                                     <Stack.Screen name='Register' component={Register} options={{ headerShown: false }}/>
+                                    <Stack.Screen name='ForgotPassword' component={ForgotPassword} options={{ headerShown: false }}/>
+                                    <Stack.Screen name='VerifyForgotPassword' component={VerifyForgotPassword} options={{ headerShown: false }}/>
+                                    <Stack.Screen name='ResetPassword' component={ResetPassword} options={{ headerShown: false }}/>
                                 </>
                         }
                     </>

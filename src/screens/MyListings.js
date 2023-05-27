@@ -1,4 +1,4 @@
-import { StyleSheet, Text, SafeAreaView, Dimensions, View, ScrollView, Image, FlatList, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Dimensions, View, ScrollView, Image, FlatList, TouchableHighlight, Platform, StatusBar } from 'react-native';
 import { AuthContext } from '../context/AuthContext';
 import { BASE_URL, processResponse } from '../config';
 import React, {useEffect, useState, useContext} from 'react';
@@ -15,6 +15,10 @@ export default function MyListings({navigation}) {
   const [motorcycleListing, setMotorcycleListing] = useState([]);
   const [boatListing, setBoatListing] = useState([]);
   const [heavyVehicleListing, setHeavyVehicleListing] = useState([]);
+
+  const numberWithCommas = (x) => {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
   const getCarListings = () => {
     try{
@@ -108,8 +112,14 @@ export default function MyListings({navigation}) {
                   )}
                 >
                   <ListItem.Content>
-                    <View style={{width: '100%', height: '100%', flexDirection: 'row', alignItems: 'center'}}>
-                      <View style={{flex: 1, flexDirection: 'row', paddingRight: 10}}>
+                    <View
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                    }}>
+                      <View style={{flex: 1, flexDirection: 'row', paddingRight: 10, alignItems: 'center', justifyContent: 'space-between'}}>
                         <View style={{flex: 1, alignItems: 'center'}}>
                           <Image
                             style={{width: 100, height: 100, borderRadius: 10}}
@@ -120,27 +130,52 @@ export default function MyListings({navigation}) {
                         </View>
                         <View style={{
                             paddingLeft: 20,
+                            paddingRight: 10,
                             flex: 2,
                             height: 100, 
-                            justifyContent: 'space-between',
+                            justifyContent: 'center',
                         }}>
-                            <Text>{listing.title}</Text>
-                            <View style={{width: '100%'}}>
-                                <View flexDirection='row' style={{width: '100%'}}>
-                                    <View flexDirection='row' style={{width: '50%'}}>
-                                        <Text>Year </Text>
-                                        <Text>{listing.model_year}</Text>
-                                    </View>
-                                    <View flexDirection='row' style={{width: '50%'}}>
-                                        <Text>KMS </Text>
-                                        <Text>{listing.mileage}</Text>
-                                    </View>
-                                </View>
-                                <View>
-                            </View>
-                            </View>
-                            <Text>{listing.price}</Text>
+                            <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 16, fontWeight: 'bold'}}>{listing.title}</Text>
+                            <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 14, fontWeight: '500'}}>{listing.variant}</Text>
+                            {/* <View style={{width: '100%'}}>
+                              <View flexDirection='row' style={{width: '100%'}}>
+                                  <View flexDirection='row' style={{width: '50%'}}>
+                                      <Text>Year </Text>
+                                      <Text>{listing.model_year}</Text>
+                                  </View>
+                                  <View flexDirection='row' style={{width: '50%'}}>
+                                      <Text>KMS </Text>
+                                      <Text>{listing.mileage}</Text>
+                                  </View>
+                              </View>
+                            </View> */}
+                            <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 18, fontWeight: '600'}}>AED {numberWithCommas(listing.price)}</Text>
                         </View>
+                        <TouchableHighlight
+                          underlayColor={'trasparent'}
+                          activeOpacity={0.1}
+                          style={{
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                          }}
+                          onPress={() => alert('Not yet available')}
+                        >
+                          <View
+                              style={{
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                              }}
+                          >
+                          <Image
+                              style={{
+                                  tintColor: '#d3d3d3',
+                                  width: 30,
+                                  height: 30,
+                              }}
+                              source={require('../../assets/eye.png')}
+                          />
+                          </View>
+                      </TouchableHighlight>
                       </View>
                     </View>
                   </ListItem.Content>
@@ -204,27 +239,40 @@ export default function MyListings({navigation}) {
                         </View>
                         <View style={{
                             paddingLeft: 20,
+                            paddingRight: 10,
                             flex: 2,
                             height: 100, 
-                            justifyContent: 'space-between',
+                            justifyContent: 'center',
                         }}>
-                            <Text>{listing.title}</Text>
-                            <View style={{width: '100%'}}>
-                                <View flexDirection='row' style={{width: '100%'}}>
-                                    <View flexDirection='row' style={{width: '50%'}}>
-                                        <Text>Year </Text>
-                                        <Text>{listing.model_year}</Text>
-                                    </View>
-                                    <View flexDirection='row' style={{width: '50%'}}>
-                                        <Text>KMS </Text>
-                                        <Text>{listing.mileage}</Text>
-                                    </View>
-                                </View>
-                                <View>
-                            </View>
-                            </View>
-                            <Text>{listing.price}</Text>
+                          <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 18, fontWeight: 'bold'}}>{listing.title}</Text>
+                          <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 16, fontWeight: '500'}}>{listing.variant}</Text>
+                          <Text numberOfLines={1} ellipsizeMode='tail' style={{fontSize: 20, fontWeight: '600'}}>AED {numberWithCommas(listing.price)}</Text>
                         </View>
+                        <TouchableHighlight
+                          underlayColor={'trasparent'}
+                          activeOpacity={0.1}
+                          style={{
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                          }}
+                          onPress={() => alert('Not yet available')}
+                        >
+                          <View
+                              style={{
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                              }}
+                          >
+                          <Image
+                              style={{
+                                  tintColor: '#d3d3d3',
+                                  width: 30,
+                                  height: 30,
+                              }}
+                              source={require('../../assets/eye.png')}
+                          />
+                          </View>
+                        </TouchableHighlight>
                       </View>
                     </View>
                   </ListItem.Content>
@@ -403,7 +451,7 @@ export default function MyListings({navigation}) {
       style={{ 
         backgroundColor: '#ffffff',
         borderRadius: 10,
-        marginBottom: 30,
+        marginBottom: 10,
         marginTop: 10,
         marginRight: 20,
         marginLeft: 20,
@@ -429,44 +477,49 @@ export default function MyListings({navigation}) {
   }, [])
   
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={{flex: 1, width: window_width}}>
+    <View style={styles.container}>
+      <StatusBar
+        backgroundColor="#0a5ca8"
+      />
+      <View
+      style={{
+        flex: 1,
+        width: window_width,
+        //paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+      }}>
         <View style={{
-          width: '100%', 
-          flexDirection: 'row', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          paddingTop: 5,
-          paddingLeft: 15,
-          paddingRight: 15,
-          paddingBottom: 5
+        backgroundColor: '#ffffff',
+        width: '100%', 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        paddingTop: 5,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingBottom: 10,
+        paddingTop: Platform.OS === 'ios' ? 50: 0,
+        backgroundColor: '#0a5ca8',
         }}>
           <TouchableHighlight
-            underlayColor={'#ffffff'}
-            style={{
-                width: 50,
-                height: 50,
-                borderRadius: 25,
-                justifyContent: 'center',
-                alignItems: 'center',
-            }}
-            onPress={() => navigation.goBack()}
+              underlayColor={'trasparent'}
+              activeOpacity={0.1}
+              style={{
+                  width: 50,
+                  height: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+              }}
+              onPress={() => navigation.goBack()}
           >
-            <View
-                style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
-                    backgroundColor: '#0a5ca8',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    elevation: 10,
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 3,
-                }}
-            >
+              <View
+                  style={{
+                      width: 50,
+                      height: 50,
+                      backgroundColor: '#0a5ca8',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                  }}
+              >
               <Image
                   style={{
                       tintColor: '#ffffff',
@@ -475,10 +528,31 @@ export default function MyListings({navigation}) {
                   }}
                   source={require('../../assets/angle-small-left.png')}
               />
-            </View>
+              </View>
           </TouchableHighlight>
-          <Text>My Listings</Text>
-          <View style={{width: 50, height: 50}}/>
+          <Text style={{color: '#ffffff', fontSize: 20, fontWeight: '600'}}>My Listings</Text>
+          <TouchableHighlight
+              underlayColor={'trasparent'}
+              style={{
+                  width: 50,
+                  height: 50,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+              }}
+              onPress={() => handleEditOn(editOn)}
+          >
+              <View
+                  style={{
+                      width: 50,
+                      height: 50,
+                      backgroundColor: '#0a5ca8',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                  }}
+              >
+                {/* <Text style={{color: '#ffffff', fontSize: 16, fontWeight: '600'}}>{editOn ? 'Save' : 'Edit'}</Text> */}
+              </View>
+          </TouchableHighlight>
         </View>
         <TabView
           swipeEnabled={false}
@@ -488,7 +562,7 @@ export default function MyListings({navigation}) {
           renderTabBar={renderTabBar}
         />
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 

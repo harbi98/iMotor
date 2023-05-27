@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { View, TextInput, StyleSheet, Dimensions, Image, SafeAreaView } from 'react-native';
+import { View, TextInput, StyleSheet, Dimensions, Image, SafeAreaView, TouchableHighlight } from 'react-native';
 import { styles } from '../public/Style';
 import { Button, Text } from '@rneui/themed';
 import { AuthContext } from '../context/AuthContext';
@@ -67,12 +67,16 @@ export default function Register({navigation}) {
           />
         </View>
         <View style={{ paddingTop: 20}}>
-          <Button
-            title="Register"
+          <TouchableHighlight
+            underlayColor={'#ffffff'}
+            activeOpacity={0.5}
+            style={custom_style.register_button}
             onPress={() => registerUser(firstName,lastName,email,password,confirmPassword)}
-            buttonStyle={custom_style.register_button}
-            titleStyle={{ fontSize: 15 }}
-          />
+          >
+            <View style={custom_style.register_button}>
+              <Text style={{color: '#ffffff', margin: 15}}>Register</Text>
+            </View>
+          </TouchableHighlight>
           <View 
             flexDirection='row' 
             style={{ alignItems: 'center', justifyContent: 'center', marginTop: 50 }}
@@ -101,7 +105,7 @@ const custom_style = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     borderRadius: 5,
-    height: 40,
+    //height: 40,
     borderColor: '#D7D7D7',
     marginTop: 5,
   },
@@ -110,9 +114,10 @@ const custom_style = StyleSheet.create({
   },
   register_button: {
     backgroundColor: '#0a5ca8',
-    width: '100%',
-    height: 40,
     borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   field_container: {
     marginTop: 10

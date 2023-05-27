@@ -1,6 +1,7 @@
 import React, { createContext, useState } from 'react';
 import { BASE_URL, processResponse } from '../config';
 import { createNavigationContainerRef } from '@react-navigation/native';
+import { useToast } from "react-native-toast-notifications";
 
 export const AuthContext = createContext();
 
@@ -13,10 +14,15 @@ export function navigate(name) {
 }
 
 export const AuthProvider = ({children}) => {
-    const [email, setEmail] = useState('');
+    const toast = useToast();
+
+    const [email, setEmail] = useState();
     const [userToken, setUserToken] = useState();
+    const [forgotPasswordToken, setForgotPasswordToken] = useState();
     const [notVerified, setNotVerified] = useState();
     const [passWord, setPassWord] = useState();
+    const [confirmPassWord, setConfirmPassWord] = useState();
+    const [errorMessage, setErrorMessage] = useState();
 
     const login = async (text_email, text_password) => {
         try{
@@ -34,18 +40,31 @@ export const AuthProvider = ({children}) => {
             .then(processResponse)
             .then(res => {
                 const { statusCode, data } = res;
+                console.log(statusCode);
                 if(statusCode === 401) {
                     if(data.verify_email == true) {
-                        alert(data.message);
+                        setErrorMessage(data.message);
                         setNotVerified(data.verify_email);
                         setEmail(data.email);
                         setPassWord(text_password);
                     } else {
-                        alert(data.message);
+                        setErrorMessage(data.message);
                     }
+                } else if(statusCode === 404){
+                    setErrorMessage(data.message);
+                } else if(statusCode === 422){
+                    setErrorMessage(data.message);
                 } else if(statusCode === 200){
-                    alert("Successfully Logged In!");
-                    setUserToken(data.token)
+                    toast.show(data.message, {
+                        type: "custom", // "normal | success | warning | danger | custom"
+                        placement: "top", // "top | bottom"
+                        duration: 4000,
+                        animationType: "zoom-in", // "slide-in | zoom-in"
+                    });
+                    setUserToken(data.token);
+                    setErrorMessage(null);
+                } else if (statusCode === 500) {
+                    alert(data.message)
                 }
             })
             .catch((e) => {
@@ -75,12 +94,30 @@ export const AuthProvider = ({children}) => {
                 console.log("Status Code", statusCode);
                 console.log(data.message);
                 if(statusCode === 200){
+                    toast.show(data.message, {
+                        type: "custom", // "normal | success | warning | danger | custom"
+                        placement: "top", // "top | bottom"
+                        duration: 4000,
+                        animationType: "zoom-in", // "slide-in | zoom-in"
+                    });
                     login(email, passWord);
+                    setEmail(null);
+                    setPassWord(null);
                     setNotVerified(false);
                 } else if(statusCode === 422){
-                    alert(data.message);
+                    toast.show(data.message, {
+                        type: "danger", // "normal | success | warning | danger | custom"
+                        placement: "top", // "top | bottom"
+                        duration: 4000,
+                        animationType: "zoom-in", // "slide-in | zoom-in"
+                    });
                 } else if(statusCode === 404){
-                    alert(data.message);
+                    toast.show(data.message, {
+                        type: "danger", // "normal | success | warning | danger | custom"
+                        placement: "top", // "top | bottom"
+                        duration: 4000,
+                        animationType: "zoom-in", // "slide-in | zoom-in"
+                    });
                 }
             })
             .catch((e) => {
@@ -111,7 +148,12 @@ export const AuthProvider = ({children}) => {
             .then(res => {
                 const { statusCode, data } = res;
                 console.log("Status Code", statusCode);
-                alert(data.message);
+                toast.show(data.message, {
+                    type: "custom", // "normal | success | warning | danger | custom"
+                    placement: "top", // "top | bottom"
+                    duration: 4000,
+                    animationType: "zoom-in", // "slide-in | zoom-in"
+                });
                 navigate('Login');
             })
             .catch((e) => {
@@ -122,7 +164,94 @@ export const AuthProvider = ({children}) => {
             console.log(e);
         }
     };
-
+    const forgotPassword = (text_email) => {
+        try{
+            fetch(BASE_URL+'forgot-password',{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: text_email
+                })
+            })
+            .then(processResponse)
+            .then(res => {
+                const { statusCode, data } = res;
+                console.log(statusCode);
+                if(statusCode === 200) {
+                    console.log(data.message);
+                    setEmail(text_email);
+                    navigate('VerifyForgotPassword');
+                }
+                console.log(data.message);
+            })
+            .catch((e) => {
+                console.log(e);
+            })
+        } catch (e){
+            console.log(e);
+        }
+    };
+    const verifyPasswordReset = (otp) => {
+        try{
+            fetch(BASE_URL+'forgot-password/verify/password-reset-request',{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: email,
+                    verification_code: otp
+                })
+            })
+            .then(processResponse)
+            .then(res => {
+                const { statusCode, data } = res;
+                if(statusCode === 200) {
+                    console.log(data.message);
+                    navigate('ResetPassword');
+                }
+                console.log(data.message);
+            })
+            .catch((e) => {
+                console.log(e);
+            })
+        } catch (e){
+            console.log(e);
+        }
+    };
+    const passwordReset = (new_password, confirm_new_password) => {
+        try{
+            fetch(BASE_URL+'forgot-password/verify/password-reset-request',{
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${forgotPasswordToken}`,
+                },
+                body: JSON.stringify({
+                    email: email,
+                    new_password: new_password,
+                    confirm_password: confirm_new_password
+                })
+            })
+            .then(processResponse)
+            .then(res => {
+                const { statusCode, data } = res;
+                if(statusCode === 200) {
+                    console.log(data.message)
+                }
+            })
+            .catch((e) => {
+                console.log(e);
+            })
+        } catch (e){
+            console.log(e);
+        }
+    };
     const logout = () => {
         try{
             fetch(BASE_URL+'logout',{
@@ -136,9 +265,13 @@ export const AuthProvider = ({children}) => {
             .then(processResponse)
             .then(res => {
                 const { statusCode, data } = res;
-                console.log("Status Code", statusCode);
-                alert(data.message);
                 if(statusCode === 200) {
+                    toast.show(data.message, {
+                        type: "custom", // "normal | success | warning | danger | custom"
+                        placement: "top", // "top | bottom"
+                        duration: 4000,
+                        animationType: "zoom-in", // "slide-in | zoom-in"
+                    });
                     setUserToken(null);
                 }
             })
@@ -160,6 +293,8 @@ export const AuthProvider = ({children}) => {
             email,
             verify,
             registerUser,
+            errorMessage,
+            forgotPassword,
         }}>{children}</AuthContext.Provider>
     );
 }
